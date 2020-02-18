@@ -7,7 +7,10 @@ from flask import current_app
 @app.route('/')
 @app.route('/index')
 def index():
-	data = get_db()
+	cnx = get_db()
+	cur = cnx.cursor()
+	cur.execute("SELECT * FROM users")
+	data = cur.fetchall()
 	return render_template('index.html', title='home', data=data)
 
 @app.route('/login', methods=['GET', 'POST'])

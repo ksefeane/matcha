@@ -1,13 +1,8 @@
 import os
 
 class Config(object):
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'wtc-matcha'
-    MYSQL_DATABASE_USER = 'ksefeane'
-    MYSQL_DATABASE_PASSWORD = 'qamagru'
-    MYSQL_DATABASE_HOST = 'localhost'
-    MYSQL_DATABASE_DB = 'matcha_db'
+	SECRET_KEY = os.environ.get('SECRET_KEY') or 'wtc-matcha'
 
-    DB = {
-    	'user': 'ksefeane',
-    	'host': 'localhost',
-    	'password': 'qamagru'}
+
+admin = {'user': 'ksefeane','host': 'localhost','password': 'qamagru'}
+db = {'db' : 'matcha_db'}

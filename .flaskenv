@@ -1,2 +1,2 @@
-FLASK_APP=matcha.py
+FLASK_APP=match
 FLASK_DEBUG=1
