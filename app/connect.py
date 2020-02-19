@@ -1,8 +1,9 @@
 from app import db
 
 
-def test():
-	add_user = ("INSERT INTO users (username, email) VALUES ('joe', 'joe@gmail.com')")
-	db.add(add_user)
+def test(name, email):
+	sql = ("INSERT INTO users (username, email) VALUES (?, ?)")
+	values = (name, email)
+	db.add(sql, values)
 	return "user added"
 

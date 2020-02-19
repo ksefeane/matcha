@@ -6,7 +6,7 @@ from app.connect import test
 @app.route('/')
 @app.route('/index')
 def index():
-	data = test()
+	data = test('le roux', 'leroux@mailinator.com')
 	return render_template('index.html', title='home', data=data)
 
 @app.route('/login', methods=['GET', 'POST'])
