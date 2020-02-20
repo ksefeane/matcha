@@ -10,5 +10,6 @@ class q:
 		sql += '(' + ','.join(params) + ')'
 		sql += " VALUES (" + x + ")"
 		db.insert(sql, values)
+		db.close()
 		return "{} inserted into {}".format(values, t_name)
 
