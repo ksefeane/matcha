@@ -1,8 +1,10 @@
 from app import db
 
 
-def test(values):
-	sql = ("INSERT INTO users (username, email) VALUES (%s, %s)")
+def test(t_name, values):
+	sql = "INSERT INTO "
+	sql += t_name
+	sql += " (username, email) VALUES (%s, %s)"
 	db.insert(sql, values)
 	return "user added"
 

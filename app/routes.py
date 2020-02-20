@@ -2,13 +2,15 @@ from flask import render_template, flash, redirect, url_for
 from app import app, db
 from app.forms import LoginForm
 from app.connect import test
+from app.query import q
 from app.tables import TABLES
 
 @app.route('/')
 @app.route('/index')
 def index():
-	values = ["kori", "kori@mailinator.com"]
-	data = test(values)
+	values = ["le roux", "le roux@mailinator.com"]
+	params = ["username", "email"]
+	data = q.insert("users", values, params)
 	return render_template('index.html', title='home', data=data)
 
 @app.route('/setup')
