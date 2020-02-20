@@ -5,31 +5,55 @@ class DB:
 	def __init__(self, logins, db):
 		self.logins = logins
 		self.db = db
-		self.connex = mysql.connector.connect(**logins)
+		try:
+			self.connex = mysql.connector.connect(**logins, **db)
+		except: 
+			self.connex = mysql.connector.connect(**logins)
 		self.cursex = self.connex.cursor()
 		
 	def create_db(self, db_name):
 		try:
 			self.cursex.execute("CREATE DATABASE {} DEFAULT CHARACTER SET 'utf8'".format(db_name))	
-			self.connex = mysql.connector.connect(self.logins, self.db)
+			self.cursex.execute("USE {}".format(db_name))
+			self.cursex.database = db_name
 			self.cursex = self.connex.cursor(prepared=True)
-			return "{} Database created successfully".format(db_name)
+			msg = "{} Database created successfully".format(db_name)
 		except mysql.connector.Error as err:
-			return "Failed to create Database: {}. error {}".format(db_name, err.msg)
+			msg = "Failed to create Database: {}. error {}".format(db_name, err.msg)
+		return msg
 
 	def init_db(self, db_name):
 		try:
+			msg = "Database {}".format(db_name)
 			self.cursex.execute("USE {}".format(db_name))
-			return "Database {}".format(db_name)
 		except mysql.connector.Error as err:
 			msg = "Database: {} does not exist ".format(db_name)
 			if err.errno == errorcode.ER_BAD_DB_ERROR:
-				self.create_db(db_name)
-				msg = ("Database {} created successfully?".format(db_name))
-				return msg
+				msg += self.create_db(db_name)
 			else:
-				return err
-				
+				try:
+					self.create_db(db_name)
+				except:
+					return err
+		return msg
+			
+	def create_t(self, tables):
+		for t_name in tables:
+			sql = tables[t_name]
+			try:
+				msg = "Table {} ".format(t_name)
+				self.cursex.execute(sql)
+			except mysql.connector.Error as err:
+				if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
+					x = "(found)"
+				else:
+					x = err.msg
+			else:
+				x = "(created)"
+			
+			z = msg + x
+		return z
+			
 
 	def destroy_db(self, db_name):
 		try:
@@ -43,5 +67,3 @@ class DB:
 		self.connex.commit()
 		self.cursex.close()
 		self.connex.close()
-
-
