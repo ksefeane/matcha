@@ -65,5 +65,3 @@ class DB:
 	def insert(self, sql, values):
 		self.cursex.execute(sql, values)
 		self.connex.commit()
-		self.cursex.close()
-		self.connex.close()
