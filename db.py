@@ -67,6 +67,11 @@ class DB:
 		self.cursex.execute(sql, values)
 		self.connex.commit()
 
+	def fetch(self, sql):
+		self.cursex.execute(sql)
+		data = self.cursex.fetchall()
+		return data
+
 	def close(self):
 		self.cursex.close()
 		self.connex.close()

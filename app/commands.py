@@ -31,4 +31,3 @@ def refresh():
 	msg += db.init_db(db.db['db'])
 	msg += db.create_t(TABLES)
 	print(msg[:-1])
-	return msg
