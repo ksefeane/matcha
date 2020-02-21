@@ -15,15 +15,10 @@ def destroy_db():
 	msg = db.destroy_db(db.db['db'])
 	print(msg)
 
-@app.cli.command("launch")
+@app.cli.command("refresh")
 @app.cli.command("init")
 @app.cli.command("initialize")
 def init_db():
 	msg = db.init_db(db.db['db'])
 	msg += db.create_t(TABLES)
-	print(msg)
-	
-@app.cli.command("create_tables")
-def create_db():
-	msg = db.create_t(TABLES)
 	print(msg)
