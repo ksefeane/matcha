@@ -17,14 +17,14 @@ class DB:
 			self.cursex.execute("USE {}\n".format(db_name))
 			self.cursex.database = db_name
 			self.cursex = self.connex.cursor(prepared=True)
-			msg = "Database {} created successfully\n".format(db_name)
+			msg = "Database: {} created successfully\n".format(db_name)
 		except mysql.connector.Error as err:
 			msg = "Failed to create Database: {}. error {}\n".format(db_name, err.msg)
 		return msg
 
 	def init_db(self, db_name):
 		try:
-			msg = "Database {} already exists\n".format(db_name)
+			msg = "Database: {} already exists\n".format(db_name)
 			self.cursex.execute("USE {}\n".format(db_name))
 		except mysql.connector.Error as err:
 			msg = "Database: {} does not exist\n".format(db_name)
@@ -38,29 +38,30 @@ class DB:
 		return msg
 			
 	def create_t(self, tables):
+		z = ''
 		for t_name in tables:
 			sql = tables[t_name]
 			try:
-				msg = "Table {} ".format(t_name)
+				msg = "Table: {} ".format(t_name)
 				self.cursex.execute(sql)
 			except mysql.connector.Error as err:
 				if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
-					x = "(found)"
+					x = "(found)\n"
 				else:
 					x = err.msg
 			else:
-				x = "(created)"
+				x = "(created)\n"
 			
-			z = msg + x
+			z += msg + x
 		return z
 			
 
 	def destroy_db(self, db_name):
 		try:
 			self.cursex.execute("DROP DATABASE {}".format(db_name))
-			return "{} destroyed".format(db_name)
+			return "Database: {} destroyed\n".format(db_name)
 		except mysql.connector.Error as err:
-			return "failed to destroy {}. error {}".format(db_name, err.msg)
+			return "Failed to destroy {}\nerror: {}".format(db_name, err.msg)
 
 	def insert(self, sql, values):
 		self.cursex.execute(sql, values)
