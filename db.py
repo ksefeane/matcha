@@ -14,20 +14,20 @@ class DB:
 	def create_db(self, db_name):
 		try:
 			self.cursex.execute("CREATE DATABASE {} DEFAULT CHARACTER SET 'utf8'".format(db_name))	
-			self.cursex.execute("USE {}".format(db_name))
+			self.cursex.execute("USE {}\n".format(db_name))
 			self.cursex.database = db_name
 			self.cursex = self.connex.cursor(prepared=True)
-			msg = "{} Database created successfully".format(db_name)
+			msg = "Database {} created successfully\n".format(db_name)
 		except mysql.connector.Error as err:
-			msg = "Failed to create Database: {}. error {}".format(db_name, err.msg)
+			msg = "Failed to create Database: {}. error {}\n".format(db_name, err.msg)
 		return msg
 
 	def init_db(self, db_name):
 		try:
-			msg = "Database {}".format(db_name)
-			self.cursex.execute("USE {}".format(db_name))
+			msg = "Database {} already exists\n".format(db_name)
+			self.cursex.execute("USE {}\n".format(db_name))
 		except mysql.connector.Error as err:
-			msg = "Database: {} does not exist ".format(db_name)
+			msg = "Database: {} does not exist\n".format(db_name)
 			if err.errno == errorcode.ER_BAD_DB_ERROR:
 				msg += self.create_db(db_name)
 			else:
