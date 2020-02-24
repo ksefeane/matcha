@@ -14,7 +14,7 @@ def destroy_db():
 	msg = db.destroy_db(db.db['db'])
 	print(msg)
 
-@app.cli.command("refresh", help='Update Tables')
+@app.cli.command("update", help='Update Tables')
 def update():
 	msg = db.create_t(TABLES)
 	print(msg[:-1])
