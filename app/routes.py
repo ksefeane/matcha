@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for
 from app import app, db
 from app.forms import LoginForm, Sign_upForm
-from app.models import q, v, verif
+from app.models import q, user
 
 @app.route('/')
 @app.route('/index')
@@ -13,17 +13,16 @@ def index():
 def sign_up():
 	form=Sign_upForm()
 	if form.validate_on_submit():
-		msg = v.sign_up([form.username.data, form.email.data])
+		msg = user.sign_up([form.username.data, form.email.data, form.password.data])
 		flash('{}'.format(msg))
-		return redirect(url_for('tables'))
+		if msg == "success":
+			return redirect(url_for('tables'))
 	return render_template('sign_up.html', title='sign_up', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	form=LoginForm()
 	if form.validate_on_submit():
-		msg = v.login(form.username.data, form.password.data)
-		flash('{}'.format(msg))
 		return redirect(url_for('index'))
 	return render_template('login.html', title='login', form=form)
 
@@ -31,6 +30,6 @@ def login():
 @app.route('/tables')
 def tables():
 	users = q.fetchall("users", "*")
-	profiles = verif.check_col("users", ["username", "email"], ["kori", "kori@mailinator.com"])
+	profiles = q.fetchall("profiles", "*")
 	images = q.fetchall("images", "*")
 	return render_template('tables.html', title='tables', users=users, profiles=profiles, images=images)

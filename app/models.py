@@ -28,7 +28,6 @@ class q:
 		sql += " WHERE " + params + "="
 		sql += "\'" + pvalue + "\'"
 		data = db.fetchone(sql)
-		data = convert.ltos(data)
 		return data
 
 	def fetchrow(t_name, res, params, pvalue):
@@ -38,16 +37,25 @@ class q:
 		sql += " WHERE " + params + "="
 		sql += "\'" + pvalue + "\'"
 		data = db.fetchall(sql)
+		if data is None:
+			return None
 		return data[0]
 
-class v:
+class user:
 	def sign_up(values):
-		params = ["username", "email"]
-#		values[2] = v.set_pass(values[2])
-		msg = q.insert("users", values, params)
-		return msg
+		params = ["username", "email", "password"]
+		verify = [params[0], params[1]]
+		err = {}
+		for x, y in zip(verify, values):
+			if q.fetchone("users", x, x, y) is not None:
+				err[x] = " not available"
+		if bool(err):
+			return err
+		values[2] = customs.set_pass(values[2])
+		res = q.insert("users", values, params)
+		return "success"
 
-class verif:
+class customs:
 	def set_pass(password):
 		pash = generate_password_hash(password)
 		return pash
@@ -55,19 +63,3 @@ class verif:
 	def check_pass(db_pass, password):
 		res = check_password_hash(db_pass, password)
 		return res
-
-	def check_col(t_name, params, values):
-		params = [params[0], params[1]]
-		res = ["username", "email", "password"]
-		values = [values[0], values[1]]
-		data = q.fetchrow(t_name, ','.join(res), params[0], values[0])
-		ans = {}
-		for x,y in zip(res, data):
-			ans[x] = y
-			if ans[x] == None:
-				return x + " is empty"
-		return ans
-
-class convert:
-	def ltos(l):
-		return ','.join(l)
