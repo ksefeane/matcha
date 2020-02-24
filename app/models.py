@@ -36,10 +36,11 @@ class q:
 		sql += " FROM " + t_name
 		sql += " WHERE " + params + "="
 		sql += "\'" + pvalue + "\'"
-		data = db.fetchall(sql)
-		if data is None:
+		try:
+			data = db.fetchall(sql)
+			return data[0]
+		except:
 			return None
-		return data[0]
 
 class user:
 	def sign_up(values):
@@ -54,6 +55,15 @@ class user:
 		values[2] = customs.set_pass(values[2])
 		res = q.insert("users", values, params)
 		return "success"
+
+	def login(values):
+		res = q.fetchrow("users", "username, password", "username", values[0])
+		if res is None:
+			return "username or password incorrect"
+		ver = customs.check_pass(res[1], values[1])
+		if ver is False:
+			return "username or password incorrect"
+		return ver
 
 class customs:
 	def set_pass(password):

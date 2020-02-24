@@ -23,6 +23,7 @@ def sign_up():
 def login():
 	form=LoginForm()
 	if form.validate_on_submit():
+		msg = user.login([form.username.data, form.password.data])
 		return redirect(url_for('index'))
 	return render_template('login.html', title='login', form=form)
 
@@ -30,6 +31,6 @@ def login():
 @app.route('/tables')
 def tables():
 	users = q.fetchall("users", "*")
-	profiles = q.fetchall("profiles", "*")
+	profiles = user.login(["aang", "aang1"])
 	images = q.fetchall("images", "*")
 	return render_template('tables.html', title='tables', users=users, profiles=profiles, images=images)
