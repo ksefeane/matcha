@@ -5,7 +5,7 @@ TABLES['users'] = (
 		" `id` int(11) NOT NULL AUTO_INCREMENT,"
 		" `username` varchar(20) NOT NULL,"
 		" `email` varchar(60) NOT NULL,"
-		" `password` varchar(100) NOT NULL,"
+		" `password` varchar(100),"
 		" PRIMARY KEY (`id`)"
 		") ENGINE=InnoDB")
 
@@ -18,7 +18,7 @@ TABLES['profiles'] = (
 		" `orientation` varchar(25) NOT NULL,"
 		" `preference` varchar(240) NOT NULL,"
 		" `interests` varchar(200) NOT NULL,"
-		" `bio` varchar(255) NOT NULL,"
+		" `bio` varchar(255),"
 		" FOREIGN KEY (`user_id`) REFERENCES users(`id`)"
 		") ENGINE=InnoDB")
 
