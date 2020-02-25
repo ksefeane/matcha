@@ -1,7 +1,9 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, session, g
 from app import app, db
 from app.forms import LoginForm, Sign_upForm
 from app.models import q, user
+
+u = user()
 
 @app.route('/')
 @app.route('/index')
@@ -23,14 +25,21 @@ def sign_up():
 def login():
 	form=LoginForm()
 	if form.validate_on_submit():
-		msg = user.login([form.username.data, form.password.data])
+		msg = u.login([form.username.data, form.password.data])
+		flash('{} logged in'.format(u.user))
 		return redirect(url_for('index'))
 	return render_template('login.html', title='login', form=form)
+
+@app.route('/logout')
+def logout():
+	flash('{} logged out'.format(user.user))
+	user.logout()
+	return redirect(url_for('tables'))
 
 
 @app.route('/tables')
 def tables():
 	users = q.fetchall("users", "*")
-	profiles = user.login(["aang", "aang1"])
-	images = q.fetchall("images", "*")
+	profiles = None
+	images = u.user
 	return render_template('tables.html', title='tables', users=users, profiles=profiles, images=images)

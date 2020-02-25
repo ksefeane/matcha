@@ -1,5 +1,6 @@
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask import session
 
 class q:
 	def insert(t_name, values, params):
@@ -43,6 +44,9 @@ class q:
 			return None
 
 class user:
+	def __init__(self):
+		self.user = None
+
 	def sign_up(values):
 		params = ["username", "email", "password"]
 		verify = [params[0], params[1]]
@@ -56,14 +60,22 @@ class user:
 		res = q.insert("users", values, params)
 		return "success"
 
-	def login(values):
+	def login(self, values):
 		res = q.fetchrow("users", "username, password", "username", values[0])
 		if res is None:
 			return "username or password incorrect"
 		ver = customs.check_pass(res[1], values[1])
 		if ver is False:
 			return "username or password incorrect"
+		session['user'] = values[0]
+		self.user = values[0]
 		return ver
+
+	def logout(self):
+		if 'user' in session:
+			session.pop('user', None)
+			self.user = "anon"
+		return name + "logged out"
 
 class customs:
 	def set_pass(password):
