@@ -5,7 +5,8 @@ TABLES['users'] = (
 		" `id` int(11) NOT NULL AUTO_INCREMENT,"
 		" `username` varchar(20) NOT NULL,"
 		" `email` varchar(60) NOT NULL,"
-		" `password` varchar(100),"
+		" `password` varchar(100) NOT NULL,"
+		" `verified` bit NOT NULL DEFAULT 0,"
 		" PRIMARY KEY (`id`)"
 		") ENGINE=InnoDB")
 
@@ -26,6 +27,13 @@ TABLES['images'] = (
 		"CREATE TABLE `images` ("
 		" `user_id` int(11),"
 		" `img_src` varchar(250) NOT NULL,"
-		" `profile_pic` varchar(250) NOT NULL,"
+		" `pro_pic` varchar(250) NOT NULL,"
+		" FOREIGN KEY (`user_id`) REFERENCES users(`id`)"
+		") ENGINE=InnoDB")
+
+TABLES['tokens'] = (
+		"CREATE TABLE `tokens` ("
+		" `user_id` int(11),"
+		" `token` varchar(100) NOT NULL,"
 		" FOREIGN KEY (`user_id`) REFERENCES users(`id`)"
 		") ENGINE=InnoDB")

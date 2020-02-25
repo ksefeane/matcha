@@ -1,25 +1,24 @@
 from flask import render_template, flash, redirect, url_for, session, g
-from app import app, db
+from app import app, db, u
 from app.forms import LoginForm, Sign_upForm
-from app.models import q, user
+from app.models import q
 
-u = user()
 
 @app.route('/')
 @app.route('/index')
 def index():
 	data = q.fetchone("users", "password", "username", "le roux")
-	return render_template('index.html', title='home', data=data)
+	return render_template('index.html', title='home', u=u, data=data)
 
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
 	form=Sign_upForm()
 	if form.validate_on_submit():
-		msg = user.sign_up([form.username.data, form.email.data, form.password.data])
+		msg = u.sign_up([form.username.data, form.email.data, form.password.data])
 		flash('{}'.format(msg))
 		if msg == "success":
-			return redirect(url_for('tables'))
-	return render_template('sign_up.html', title='sign_up', form=form)
+			return redirect(url_for('login'))
+	return render_template('sign_up.html', title='sign_up', u=u, form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -28,18 +27,20 @@ def login():
 		msg = u.login([form.username.data, form.password.data])
 		flash('{} logged in'.format(u.user))
 		return redirect(url_for('index'))
-	return render_template('login.html', title='login', form=form)
+	return render_template('login.html', title='login', u=u, form=form)
 
 @app.route('/logout')
 def logout():
-	flash('{} logged out'.format(user.user))
-	user.logout()
-	return redirect(url_for('tables'))
+	if u.user:
+		flash('{} logged out'.format(u.user))
+		u.logout()
+		return redirect(url_for('index'))
+	return redirect(url_for('login'))
 
 
 @app.route('/tables')
 def tables():
 	users = q.fetchall("users", "*")
-	profiles = None
+	profiles = q.fetchall("profiles", "*")
 	images = u.user
-	return render_template('tables.html', title='tables', users=users, profiles=profiles, images=images)
+	return render_template('tables.html', u=u, title='tables', users=users, profiles=profiles, images=images)

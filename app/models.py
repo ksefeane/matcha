@@ -47,7 +47,7 @@ class user:
 	def __init__(self):
 		self.user = None
 
-	def sign_up(values):
+	def sign_up(self, values):
 		params = ["username", "email", "password"]
 		verify = [params[0], params[1]]
 		err = {}
@@ -72,9 +72,11 @@ class user:
 		return ver
 
 	def logout(self):
+		name = None
 		if 'user' in session:
+			name = self.user
 			session.pop('user', None)
-			self.user = "anon"
+			self.user = None
 		return name + "logged out"
 
 class customs:
