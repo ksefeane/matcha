@@ -1,9 +1,10 @@
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import session
+import secrets
 
 class q:
-	def insert(t_name, values, params):
+	def insert(t_name, params, values):
 		x = ''
 		for y in params:
 			x += '%s,'
@@ -43,9 +44,17 @@ class q:
 		except:
 			return None
 
+	def delrow(t_name, param, value):
+		sql = "DELETE FROM " + t_name
+		sql += " WHERE " + param + "=\'" + value + "\'"
+		db.connect(sql)
+		msg = "row deleted"
+		return msg
+
 class user:
 	def __init__(self):
 		self.user = None
+		self.token = None
 
 	def sign_up(self, values):
 		params = ["username", "email", "password"]
@@ -57,27 +66,39 @@ class user:
 		if bool(err):
 			return err
 		values[2] = customs.set_pass(values[2])
-		res = q.insert("users", values, params)
+		q.insert("users", params, values)
 		return "success"
 
 	def login(self, values):
-		res = q.fetchrow("users", "username, password", "username", values[0])
+		res = q.fetchrow("users", "id, password", "username", values[0])
 		if res is None:
 			return "username or password incorrect"
 		ver = customs.check_pass(res[1], values[1])
 		if ver is False:
 			return "username or password incorrect"
+		tok = secrets.token_hex(50)
+		q.insert("tokens", ["user_id", "token"], [res[0], tok])
 		session['user'] = values[0]
+		session['token'] = tok
 		self.user = values[0]
+		self.token = tok
 		return ver
 
 	def logout(self):
-		name = None
-		if 'user' in session:
-			name = self.user
-			session.pop('user', None)
-			self.user = None
-		return name + "logged out"
+		if 'token' in session:
+			tok = session['token']
+			session.pop('token', None)
+			tok = q.delrow("tokens", "user_id", "1")
+		return tok + " logged out"
+
+	def register(self, values):
+		params = ["user_id", "first_name", "last_name", "gender", "orientation", "preference", "interests", "bio"]
+		res = q.fetchrow("tokens", "user_id", "token", session['token'])
+		if res is None:
+			return "error"
+		values.insert(0, res[0])
+		q.insert("profiles", params, values)
+		return "success"
 
 class customs:
 	def set_pass(password):

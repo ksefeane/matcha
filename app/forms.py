@@ -14,12 +14,12 @@ class Sign_upForm(FlaskForm):
 	password2 = PasswordField('Password2', validators=[DataRequired()])
 	submit = SubmitField('sign_up')
 
-class RegistrationForm(FlaskForm):
-	first_name = StringField('First_name', validators=[DataRequired])
-	last_name = StringField('Last_name', validators=[DataRequired])
-	gender = StringField('Gender', validators=[DataRequired])
-	orientation = StringField('Orientation', validators=[DataRequired])
-	preference = StringField('Preference', validators=[DataRequired])
-	interests = StringField('Interests', validators=[DataRequired])
-	bio = StringField('Bio', validators=[DataRequired])
+class RegisterForm(FlaskForm):
+	first_name = StringField('First_name', validators=[DataRequired()])
+	last_name = StringField('Last_name', validators=[DataRequired()])
+	gender = StringField('Gender', validators=[DataRequired()])
+	orientation = StringField('Orientation', validators=[DataRequired()])
+	preference = StringField('Preference', validators=[DataRequired()])
+	interests = StringField('Interests', validators=[DataRequired()])
+	bio = StringField('Bio', validators=[DataRequired()])
 	submit = SubmitField('register')

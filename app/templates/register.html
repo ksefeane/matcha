@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3> Register </h3>
+<form action="" method=post novalidate>
+{{ form.hidden_tag() }}
+
+{{ form.first_name.label }} <br />
+{{ form.first_name(size=18) }} </p>
+{% for error in form.first_name.errors %}
+<span style="color: red;">[{{ error }}]</span>
+{% endfor %} </p>
+
+{{ form.last_name.label }} <br />
+{{ form.last_name(size=18) }} </p>
+{% for error in form.last_name.errors %}
+<span style="color: red;">[{{ error }}]</span>
+{% endfor %} </p>
+
+{{ form.gender.label }} <br />
+{{ form.gender(size=18) }} </p>
+{% for error in form.gender.errors %}
+<span style="color: red;">[{{ error }}]</span>
+{% endfor %} </p>
+
+{{ form.orientation.label }} <br />
+{{ form.orientation(size=18) }} </p>
+{% for error in form.orientation.errors %}
+<span style="color: red;">[{{ error }}]</span>
+{% endfor %} </p>
+
+
+{{ form.preference.label }} <br />
+{{ form.preference(size=18) }} </p>
+{% for error in form.preference.errors %}
+<span style="color: red;">[{{ error }}]</span>
+{% endfor %} </p>
+
+
+{{ form.interests.label }} <br />
+{{ form.interests(size=18) }} </p>
+{% for error in form.interests.errors %}
+<span style="color: red;">[{{ error }}]</span>
+{% endfor %} </p>
+
+
+{{ form.bio.label }} <br />
+{{ form.bio(size=18) }} </p>
+{% for error in form.bio.errors %}
+<span style="color: red;">[{{ error }}]</span>
+{% endfor %} </p>
+
+{{ form.submit() }}
+</form>
+{% endblock %}

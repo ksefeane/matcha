@@ -6,13 +6,14 @@
 
 <div>
 <h3> matcha - 
-{% if u.user %}
+{% if session['token'] %}
 <a href="{{ url_for('index') }}">home</a>
 <a href="{{ url_for('tables') }}">tables</a>
 <a href="{{ url_for('logout') }}">logout</a>
 {% else %}
 <a href="{{ url_for('login') }}">login</a>
 <a href="{{ url_for('sign_up') }}">sign_up</a>
+<a href="{{ url_for('tables') }}">tables</a>
 {% endif %}
 </div></hr>
 

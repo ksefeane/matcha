@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, session, g
 from app import app, db, u
-from app.forms import LoginForm, Sign_upForm
+from app.forms import LoginForm, Sign_upForm, RegisterForm
 from app.models import q
 
 
@@ -25,22 +25,40 @@ def login():
 	form=LoginForm()
 	if form.validate_on_submit():
 		msg = u.login([form.username.data, form.password.data])
-		flash('{} logged in'.format(u.user))
-		return redirect(url_for('index'))
+		flash('{} logged in'.format(session['token']))
+		return redirect(url_for('register'))
 	return render_template('login.html', title='login', u=u, form=form)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+	form=RegisterForm()
+	if form.validate_on_submit():
+		values = [
+			form.first_name.data,
+			form.last_name.data, 
+			form.gender.data, 
+			form.orientation.data, 
+			form.preference.data, 
+			form.interests.data, 
+			form.bio.data]
+		msg = u.register(values)
+		flash('{}'.format(msg))
+		if msg == "success":
+			return redirect(url_for('tables'))
+	return render_template('register.html', title='sign_up', u=u, form=form)
 
 @app.route('/logout')
 def logout():
-	if u.user:
-		flash('{} logged out'.format(u.user))
-		u.logout()
-		return redirect(url_for('index'))
-	return redirect(url_for('login'))
+	if session['token']:
+		msg = u.logout()
+		flash('{}'.format(msg))
+		return redirect(url_for('login'))
+	return redirect(url_for('index'))
 
 
 @app.route('/tables')
 def tables():
 	users = q.fetchall("users", "*")
 	profiles = q.fetchall("profiles", "*")
-	images = u.user
+	images = q.fetchall("tokens", "*")
 	return render_template('tables.html', u=u, title='tables', users=users, profiles=profiles, images=images)
