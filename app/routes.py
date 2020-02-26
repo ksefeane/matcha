@@ -60,5 +60,5 @@ def logout():
 def tables():
 	users = q.fetchall("users", "*")
 	profiles = q.fetchall("profiles", "*")
-	images = q.fetchall("tokens", "*")
-	return render_template('tables.html', u=u, title='tables', users=users, profiles=profiles, images=images)
+	tokens = q.fetchall("tokens", "*")
+	return render_template('tables.html', u=u, title='tables', users=users, profiles=profiles, tokens=tokens)
