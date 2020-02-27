@@ -1,16 +1,8 @@
-import xml.etree.ElementTree as ET 
+import csv
 
-tree = ET.parse('country_data.xml')
-root = tree.getroot()
-
-print(root)
-
-i = tree.getiterator()
-c = root.getchildren()
-tags = ''
-kids = ''
-for x in i:
-	tags += x.tag + '\n'
-for a in c:
-	kids += x.tag + ','
-print(tags)
+with open('test.csv') as csvfile:
+    readCSV = csv.reader(csvfile, delimiter=',')
+    for row in readCSV:
+        print(row)
+        print(row[0])
+        print(row[0],row[1],row[2],)
