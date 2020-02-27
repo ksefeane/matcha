@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, session, g
 from app import app, db, u
 from app.forms import LoginForm, Sign_upForm, RegisterForm
-from app.models import q
+from app.models import q, email
 
 
 @app.route('/')
@@ -26,6 +26,7 @@ def login():
 	if form.validate_on_submit():
 		msg = u.login([form.username.data, form.password.data])
 		flash('{} logged in'.format(session['token']))
+		email.send_email("msefeane@gmail.com", "testing", "greeting from matcha")
 		return redirect(url_for('register'))
 	return render_template('login.html', title='login', u=u, form=form)
 
