@@ -1,8 +1,6 @@
-from app import db, mail
+from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import session
-from flask_mail import Message
-import secrets
 
 class q:
 	def insert(t_name, params, values):
@@ -123,11 +121,3 @@ class customs:
 			return tok
 		session['token'] = res[0]
 		return res[0]
-
-class email:
-	def send_email(address, title, body):
-		msg = Message(title, sender=("Me", "matcha@matcha.com"), recipients=[address])
-		msg.body = body
-		assert msg.sender == "Me <matcha@matcha.com>"
-		mail.send(msg)
-

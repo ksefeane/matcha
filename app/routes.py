@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, session, g
 from app import app, db, u
 from app.forms import LoginForm, Sign_upForm, RegisterForm
-from app.models import q, email
+from app.models import q
 
 
 @app.route('/')

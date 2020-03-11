@@ -1,8 +1,5 @@
 import csv
+import pandas as pd
 
-with open('test.csv') as csvfile:
-    readCSV = csv.reader(csvfile, delimiter=',')
-    for row in readCSV:
-        print(row)
-        print(row[0])
-        print(row[0],row[1],row[2],)
+data = pd.read_csv('test.csv')
+print(data.shape)
