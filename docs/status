@@ -1,0 +1,19 @@
+done
+====
+1. install npm & node (sudo zypper in npm)
+2. install mongodb
+	sudo rpm --import https://www.mongodb.org/static/pgp/server-4.2.asc
+	sudo zypper addrepo --gpgcheck "https://repo.mongodb.org/zypper/suse/15/mongodb-org/4.2/x86_64/" mongodb
+	sudo zypper -n install mongodb-org
+
+	
+todo
+====
+-configure database
+-create database connections
+-create database functions
+-create views
+
+tutorial
+========
+zellwk.com/blog/crud-express-mongodb/
