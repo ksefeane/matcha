@@ -2,4 +2,14 @@
 <p><%= token %></p>
 <a href='/p'>edit profile</a><br>
 <a href='/p/upload'>upload photos</a>
+
+
+<div>
+    <ul>
+        <% for(var i = 0 ; i < items.length ; i++) { %>
+        <li><%= items[i].username  %> </li>
+        <% } %>
+    </ul>
+</div>
+
 <%- include ('partials/footer') %>

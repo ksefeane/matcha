@@ -63,4 +63,31 @@ query.fetchone = (t_name, val, params, pval, callback) => {
 	})
 }
 
+/**
+ * Suggestions based on users age OR gender OR location
+ *
+ * These suggestions are exact match suggestions except for the age suggestion.
+ * That suggestion gives you all users that are between 5 years older or younger than the user
+ *
+ * @param user
+ * @param callback
+ */
+query.fetchGenericSugestions= (user, callback) => {
+	const sql = "select p.* from profiles p " +
+		"where" +
+		"( p.age BETWEEN (select f.age from profiles f where f.username = '"+user +"')-10  AND " +
+		"(select f.age from profiles f where f.username = '"+user +"')+10)" +
+		"or p.gender = ( select g.gender from profiles g where g.username = '"+user +"')" +
+		"or p.location = ( select x.location from profiles x where x.username = '"+user +"')";
+
+	console.log('sql statement :: '+sql)
+	DB.fetch(sql, (err, res) => {
+		if (err)
+			callback(err, null)
+		else{
+			callback(null, res)
+		}
+	})
+}
+
 module.exports = query
