@@ -1,12 +1,13 @@
 <%- include ('partials/header') %>
-<ul id="messages"></ul>
+<% for (let i in chats) {%>
+	<small><%=chats[i].sender%></small></br><h6><%=chats[i].message%></h6>
+<%}%>
+<h6 id="messages"></h6>
 <form action="">
-	<input id="m">
 	<input type="hidden" id="receiver" value="<%=receiver%>">
 	<input type="hidden" id="user" value="<%=user%>">
+	<input id="m">
 	<button>send</button>
-</form>
+</form></p>
 <script src="/js/chat.js"></script>
 <%- include ('partials/footer') %>
-
-

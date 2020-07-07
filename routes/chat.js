@@ -5,6 +5,6 @@ const chatController = require('../controllers/chatController')
 
 router.get('/', profileController.auth, chatController.messages)
 
-router.get('/:match', profileController.auth, chatController.chat)
+router.get('/:match', profileController.auth, chatController.auth, chatController.chat)
 
 module.exports = router

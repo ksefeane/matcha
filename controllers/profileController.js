@@ -1,6 +1,6 @@
 const Profile = require('../models/profileModel')
 const Q = require('../models/queryModel')
-const params = ['age', 'gender', /*'orientation',*/ 'preference', 'interests', 'city', 'country', 'bio', 'popularity']
+const params = ['age', 'gender', 'preference', 'interests', 'city', 'country', 'bio', 'popularity', 'last_seen']
 const upload = require('../models/imageModel')
 const Geo = require('../models/geoModel')
 const http = require('http')
@@ -35,29 +35,60 @@ exports.auth = (req, res, next) => {
 exports.formProfile = (req, res) => {
 	var token = req.session.token
 	var adminToken = req.session.adminToken
+	var pro = {age: null, gender: null, preference: null, interests: null, city: null, country: null, bio: null}
 	if (token)
 		Q.fetchone("profiles", params, 'username', req.session.user, (err, result) => { 
 			if (err)
 				res.redirect('/login')
 			else if (result.length > 0)
-				var p = result[0]
-			else
-				var p = []
+				pro = result[0]
 			res.render('profileForm', {
 				token: token,
-				age: p.age,
-				gender: p.gender,
-				preference: p.preference,
-				interests: p.interests,
-				city: p.city,
-				country: p.country,
-				bio: p.bio,
+				p: pro,
 				adminToken: adminToken,
 				user: req.session.user
 			})
 		})
 	else
 		res.redirect('/login')
+}
+
+exports.registerProfile = (req, res) => {
+	var sess = req.session
+	var user = req.session.user
+	var token = req.session.token
+	var adminToken = req.session.adminToken
+	var t = {token: token, adminToken: adminToken}
+	Q.fetchone("tokens", ['username'], 'token', sess.token, (err, result) => {
+		if (result && result.length > 0) {
+			var newProfile = new Profile(result[0].username, req.body)
+			Profile.validate(newProfile, (err, success) => {
+				if (err) {
+					console.log("error ", err)
+					res.render('profileForm', {user: user, token: token, adminToken: adminToken, p: req.body, e: err})
+				}
+				else {
+					Profile.register(result[0].username, req.body.password, newProfile, (err, success) => {
+						if (err) {
+							console.log(err)
+							res.render('profileForm', {user: user, token: token, adminToken: adminToken, p: req.body, e: err})
+						}
+						else {
+							/*successful profile registration/update triggers geolocation function*/
+							exports.geolocation(req)
+							/*end of modifications to registerProfile*/
+							console.log('profile updated')
+							res.redirect('/p/upload')
+						}
+					})
+				}
+			})
+		}
+		else {
+			console.log("please log in to register")
+			res.redirect('/login')
+		}		
+	})
 }
 
 exports.userProfile = (req, res) => {
@@ -78,10 +109,13 @@ exports.userProfile = (req, res) => {
 
 exports.matchProfile = (req, res) => {
 	var match = req.params.match
+	var user = req.session.user
 	Q.fetchone("profiles", ['username', params], 'username', match, (err, result) => {
 		if (err)
 			res.redirect('/')
 		else if (result.length > 0) {
+			Q.deloneMRows('notifications', ['sender', 'receiver', 'type'], [match, user, 'visit'], () => {})
+			Q.deloneMRows('notifications', ['sender', 'receiver', 'type'], [match, user, 'like'], () => {})
 			B.visit(req.session.user, match, (err, success) => {
 				if (err)
 					console.log(err)
@@ -99,7 +133,6 @@ exports.matchProfile = (req, res) => {
 	})
 }
 
-
 exports.likeTweaked = (req, res) => {
 	var user = req.session.user
 	var liked = req.body.like
@@ -109,12 +142,14 @@ exports.likeTweaked = (req, res) => {
 		} 
 		else {
 			res.send(result)
-			B.checkMatch(user, liked, (err, result) => {
+			B.checkMatch(user, liked, (err, result, lovers) => {
 				if (err) {
 					console.log(err)
 				} 
-				else {
+				else if (result){
 					console.log(result)
+				} else if (lovers) {
+					console.log(lovers)
 				}
 			})
 		}
@@ -173,37 +208,6 @@ exports.blockStatus = (req, res) => {
 	}).catch(err => {
 		console.log(err)
 		res.send(JSON.stringify({error: err}))
-	})
-}
-
-exports.registerProfile = (req, res) => {
-	var sess = req.session
-	Q.fetchone("tokens", ['username'], 'token', sess.token, (err, result) => {
-		if (result && result.length > 0) {
-			var newProfile = new Profile(result[0].username, req.body)
-			Profile.validate(newProfile, (err, success) => {
-				if (err) {
-					console.log("error ", err)
-				}
-				else {
-					Profile.register(result[0].username, req.body.password, newProfile, (err, success) => {
-						if (err)
-							console.log('failed to update profile')
-						else {
-							/*successful profile registration/update triggers geolocation function*/
-							exports.geolocation(req)
-							/*end of modifications to registerProfile*/
-							console.log('profile updated')
-							res.redirect('/p/upload')
-						}
-					})
-				}
-			})
-		}
-		else {
-			console.log("please log in to register")
-			res.redirect('/login')
-		}		
 	})
 }
 

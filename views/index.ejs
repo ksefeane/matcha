@@ -1,11 +1,26 @@
 <%- include ('partials/header') %>
-<% if (suggestions) { for (let i in suggestions) { if (suggestions[i].blocked === 0 && suggestions[i].suspended === 0 && suggestions[i].suitable === 1) {%>
-	<a href='/p/<%=suggestions[i].username%>'>
-		<li class="list-group-item">
-			<div><%=suggestions[i].username%> - <%=suggestions[i].gender%></div>
-			<div><%=suggestions[i].city%> ( <%=suggestions[i].distance%> km )</div>
-		</li>
-	</a>
-<%}}}%>
-<%- include ('partials/footer') %>
+<%if (e) {%><span style="color:red"><%=e%></span><%}%>
 
+<div class="row row-cols-1 row-cols-md-3">
+<% if (suggestions) { for (let i in suggestions) {%>
+	<div class="col mb-2">
+		<div class="card text-white bg-transparent">
+			<img src="/uploads/<%=suggestions[i].username%>" id="pro" onerror="this.onerror=null;this.src='/uploads/avatar.jpg';" class="card-img" width="200" height="350">
+			<div class="card-body card-img-overlay text-danger">
+				<br><br><br>
+				<h3><%=suggestions[i].username%></h3>
+				<p><%=suggestions[i].gender%></p>
+				<p><%=suggestions[i].city%></p>
+				<p><%=suggestions[i].bio%></p>
+				<div class="align-self-md-end">
+					<a href='/p/<%=suggestions[i].username%>' class="btn bg-danger">profile</a>
+					<a href='/chat/<%=suggestions[i].username%>' class="btn bg-danger">chat</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<%}}%>
+</div>
+
+<%- include ('partials/footer') %>

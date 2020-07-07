@@ -39,11 +39,11 @@ User.check = (user, callback) => {
 	var msg = 'not available'
 	Q.fetchone("users", 'username', 'username', user.username, (err, res) => {
 		if (res && res.length > 0)
-			callback('(username not available)')
+			callback({username: '(username not available)'})
 		else {
 			Q.fetchone("users", 'email', 'email', user.email, (err, res) => {
 				if (res && res.length > 0)
-					callback('(email not available)')
+					callback({email: '(email not available)'})
 				else
 					callback(null, 'success')
 			})
@@ -109,6 +109,7 @@ User.login = (user, callback) => {
 							})
 						})
 						insure.then(token => {
+							Q.update('profiles', ['last_seen'], 0, 'username', user.username, (err, res) => {})
 							callback(null, token)
 						})
 					})

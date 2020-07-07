@@ -144,6 +144,111 @@ query.fetchoneMRows = (t_name, val, params, pvals, callback) => {
 		}
 	})
 }
+query.fetchoneMOrRows = (t_name, val, params, pvals, callback) => {
+	var sql = "SELECT "+val+" FROM "+t_name+" WHERE "
+	var chunk = ""
+	for(i = 0; i < pvals.length; i++) {
+		chunk += params[0]+"=\'"+pvals[i]+"\'"
+		if (i + 1 < pvals.length)
+			chunk += " OR "
+	}
+	sql += chunk
+	DB.fetch(sql, (err, res) => {
+		if (err)
+			callback(err, null)
+		else {
+			callback(null, res)
+		}
+	})
+}
+
+query.fetchoneMRowNot = (t_name, val, params, pvals, ovals, callback) => {
+	var sql = "SELECT "+val+" FROM "+t_name+" WHERE "
+	var chunk1 = ""
+	var chunk2 = ""
+	for(i = 0; i < params.length; i++) {
+		chunk1 += params[i]+"=\'"+pvals[i]+"\'"
+		chunk2 += params[i]+"=\'"+ovals[i]+"\'"
+		if (i + 1 < params.length) {
+			chunk1 += " AND NOT "
+			chunk2 += " AND NOT "
+		}
+	}
+	if (ovals[0])
+		sql += chunk1 +' OR '+chunk2
+	else
+		sql += `${chunk1}`
+	DB.fetch(sql, (err, res) => {
+		if (err)
+			callback(err, null)
+		else {
+			callback(null, res)
+		}
+	})
+}
+
+query.fetchoneRange = (t_name, val, param, range1, range2, callback) => {
+	var sql = "SELECT "+val+" FROM "+t_name+" WHERE "
+	var chunk = ` ${param} BETWEEN ${range1} AND ${range2}`
+	sql += chunk
+	DB.fetch(sql, (err, res) => {
+		if (err)
+			callback(err, null)
+		else {
+			callback(null, res)
+		}
+	})
+}
+
+query.fetchoneMAndOr = (t_name, val, params, pvals, ovals, callback) => {
+	var sql = "SELECT "+val+" FROM "+t_name+" WHERE "
+	var chunk1 = ""
+	var chunk2 = ""
+	for(i = 0; i < params.length; i++) {
+		chunk1 += params[i]+"=\'"+pvals[i]+"\'"
+		chunk2 += params[i]+"=\'"+ovals[i]+"\'"
+		if (i + 1 < params.length) {
+			chunk1 += " AND "
+			chunk2 += " AND "
+		}
+	}
+	sql += chunk1 +' OR ' + chunk2
+	DB.fetch(sql, (err, res) => {
+		if (err)
+			callback(err, null)
+		else {
+			callback(null, res)
+		}
+	})
+}
+
+query.fetchoneMAndOr4 = (t_name, val, params, pvals, ovals, uvals, xvals, callback) => {
+	var sql = "SELECT "+val+" FROM "+t_name+" WHERE "
+	var chunk1 = ""
+	var chunk2 = ""
+	var chunk3 = ""
+	var chunk4 = ""
+	for(i = 0; i < params.length; i++) {
+		chunk1 += params[i]+"=\'"+pvals[i]+"\'"
+		chunk2 += params[i]+"=\'"+ovals[i]+"\'"
+		chunk3 += params[i]+"=\'"+uvals[i]+"\'"
+		chunk4 += params[i]+"=\'"+xvals[i]+"\'"
+		if (i + 1 < params.length) {
+			chunk1 += " AND "
+			chunk2 += " AND "
+			chunk3 += " AND "
+			chunk4 += " AND "
+		}
+	}
+	sql += chunk1+' OR '+chunk2+' OR '+chunk3+' OR '+chunk4
+	DB.fetch(sql, (err, res) => {
+		if (err)
+			callback(err, null)
+		else {
+			callback(null, res)
+		}
+	})
+}
 
 query.deloneMRows = (t_name, params, pvals, callback) => {
 	var sql = "DELETE FROM "+t_name+" WHERE "

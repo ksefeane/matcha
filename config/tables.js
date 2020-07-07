@@ -29,6 +29,7 @@ var tables = {
 		" `bio` varchar(140)," +
 		" `popularity` int (2) NOT NULL DEFAULT 0," +
 		" `suspended` int (1) NOT NULL DEFAULT 0," +
+		" `last_seen` varchar(30) NOT NULL DEFAULT 0," +
 		" PRIMARY KEY (`id`)" +
 		") ENGINE=InnoDB"
 	),
@@ -64,6 +65,24 @@ var tables = {
 		" `visited` varchar(20) NOT NULL," +
 		" `year` int(4) NOT NULL," +
 		" `month` int(2) NOT NULL," +
+		" PRIMARY KEY (`id`)" +
+		") ENGINE=InnoDB"
+	),
+	notifications : (
+		"CREATE TABLE `notifications` (" +
+		" `id` int(11) NOT NULL AUTO_INCREMENT," +
+		" `sender` varchar(20) NOT NULL," +
+		" `receiver` varchar(20) NOT NULL," +
+		" `type` varchar(20) NOT NULL," +
+		" PRIMARY KEY (`id`)" +
+		") ENGINE=InnoDB"
+	),
+	chats : (
+		"CREATE TABLE `chats` (" +
+		" `id` int(11) NOT NULL AUTO_INCREMENT," +
+		" `sender` varchar(20) NOT NULL," +
+		" `receiver` varchar(20) NOT NULL," +
+		" `message` varchar(400) NOT NULL," +
 		" PRIMARY KEY (`id`)" +
 		") ENGINE=InnoDB"
 	),

@@ -1,40 +1,57 @@
 <%- include ('partials/header') %>
 <form action="/p" method="post">
 	<label for="age">age</label><br>
-	<input type="text" id="age" name="age" required value="<%= age %>"></p>		
+	<input type="text" id="age" name="age" required value="<%=p.age %>">
+	<%if (e && e.age) {%><br><span style="color:red"><%=e.age%></span><%}%>
+	</br>		
 	
 	<label for="gender">gender</label><br>
 	<input type="radio" id="male" name="gender" value="male" 
-	<%if(gender=="male"){%>checked<%}%>>
+	<%if(p.gender=="male"){%>checked<%}%>>
 	<label for="male">male</label>
 	<input type="radio" id="female" name="gender" value="female" 
-	<%if(gender=="female"){%>checked<%}%>>
-	<label for="female">female</label><br>
+	<%if(p.gender=="female"){%>checked<%}%>>
+	<label for="female">female</label>
+	<%if (e && e.gender) {%><br><span style="color:red"><%=e.gender%></span><%}%>
+	<br>
 	
 	<label for="preference">preference</label><br>
 	<input type="radio" id="men" name="preference" value="men"
-	<%if(preference=="men"){%>checked<%}%>>
+	<%if(p.preference=="men"){%>checked<%}%>>
 	<label for="men">men</label>
 	<input type="radio" id="women" name="preference" value="women"
-	<%if(preference=="women"){%>checked<%}%>>
+	<%if(p.preference=="women"){%>checked<%}%>>
 	<label for="women">women</label>
 	<input type="radio" id="both" name="preference" value="both"
-	<%if(preference=="both"){%>checked<%}%>>
-	<label for="both">both</label><br>
+	<%if(p.preference=="both"){%>checked<%}%>>
+	<label for="both">both</label>
+	<%if (e && e.preference) {%><br><span style="color:red"><%=e.preference%></span><%}%>
+	<br>
 
 	<label for="interests">interests</label><br>
-	<input type="text" id="interests" name="interests" required value="<%= interests%>"></p>
+	<input type="text" id="interests" name="interests" required value="<%=p.interests%>">
+	<%if (e && e.interests) {%><br><span style="color:red"><%=e.interests%></span><%}%>
+	</br>
 
 	<label for="city">city</label><br>
-	<input type="text" id="city" name="city" maxlength="42" required value="<%= city%>"></p>	
+	<input type="text" id="city" name="city" maxlength="42" required value="<%=p.city%>">
+	<%if (e && e.locate) {%><br><span style="color:red"><%=e.locate%></span><%}%>
+	</br>
+
 	<label for="country">country</label><br>
-	<input type="text" id="country" name="country" maxlength="42" required value="<%= country%>"></p>
+	<input type="text" id="country" name="country" maxlength="42" required value="<%=p.country%>">
+	<%if (e && e.locate2) {%><br><span style="color:red"><%=e.locate2%></span><%}%>
+	</br>
 
 	<label for="bio">bio</label><br>
-	<textarea id="bio" name="bio" rows="4" cols="23"><%= bio%></textarea><br>
+	<textarea id="bio" name="bio" rows="4" cols="23"><%=p.bio%></textarea>
+	<%if (e && e.bio) {%><br><span style="color:red"><%=e.bio%></span><%}%>
+	<br>
 
 	<label for="password">password</label><br>
-	<input type="password" id="password" name="password" required></p>
+	<input type="password" id="password" name="password" required>
+	<%if (e && e.password) {%><br><span style="color:red"><%=e.password%></span><%}%>
+	</p>
 	<input type="submit" value="submit">
 </form><br>
 

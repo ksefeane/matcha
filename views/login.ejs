@@ -2,10 +2,13 @@
 <h2>login</h2><br>
 <form action="/login" method="post">
 	<label for="username">username</label><br>
-	<input type="text" id="username" name="username"><br>		
+	<input type="text" id="username" name="username"><br>
 	<label for="password">password</label><br>
 	<input type="password" id="password" name="password"><br>
 	<br>
+	<% if (e != null) {%>
+		<p style="color:red"><%=e%></p>
+	<%}%>
 	<input type="submit" value="submit">
 </form><br>
 <a href="./f">forgot password?</a>

@@ -1,0 +1,9 @@
+<%- include ('partials/header') %>
+<% if (suggestions) { for (let i in suggestions) {%>
+	<a href='/p/<%=suggestions[i].username%>'>
+		<li class="list-group-item">
+			<div><%=suggestions[i].username%> - <%=suggestions[i].gender%> - <%=suggestions[i].city%></div>
+		</li>
+	</a>
+<%}}%>
+<%- include ('partials/footer') %>

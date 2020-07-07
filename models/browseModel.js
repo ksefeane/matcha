@@ -2,30 +2,10 @@ const Q = require('./queryModel')
 var Mutex = require('async-mutex').Mutex
 var Semaphore = require('async-mutex').Semaphore
 var withTimeout = require('async-mutex').withTimeout
+var S = require('./securityModel')
 
 var Browse = function(){}
-/*
-Browse.like = (user, liked, callback) => {
-	var par = ['username', 'liked']
-	Q.fetchone("likes", par, 'liked', liked, (err, res) => {
-		if (res && res.length > 0) {
-			Q.delone("likes", 'liked', liked, (err, result) => {
-				if (err)
-					callback(err, null)
-				else
-					callback(null, `${user} unliked ${liked}`)
-			})
-		} else {
-			Q.insert("likes", par, [user, liked], (err, result) => {
-				if (err)
-					callback(err, null)
-				else
-					callback(null, `${user} liked ${liked}`)
-			})
-		}
-	})
-}
-*/
+
 Browse.popularity = (match, callback) => {
 	Q.fetchone("visits", ['visited'], 'visited', match, (err, a) => {
   		if (err)
@@ -211,13 +191,220 @@ Browse.checkMatch = (user, liked, callback) => {
 						callback(err+" mxm", null)
 					else {
 						Q.updateMRows("likes", ['lovers'], 1, params, [user, liked], (err, success) => {
-							callback(null, `${user} & ${liked} like each other!`)
+							Q.fetchoneMRows('notifications', ['sender'], ['sender', 'receiver', 'type'], [user, liked, 'love'], (err, data) => {
+								if (data && data.length == 0) {
+									Q.insert('notifications', ['sender', 'receiver', 'type'], [user, liked, 'love'], (err, res) => {})
+								}
+							})
+							callback(null, null, `${user} & ${liked} like each other!`)
 						})
 					}
 				})
 			}
 		}
 	})
+}
+
+Browse.findLocals = (username, callback) => {
+	var gender = 'male'
+	var bi = null
+	var locals = []
+	Q.fetchone('profiles', ['id', 'preference', 'city', 'interests'], 'username', username, (err, profile) => {
+		if (profile && profile.length > 0) {
+			if (profile[0].preference === 'women')
+				gender = 'female'
+			else if(profile[0].preference === 'both')
+				bi = 'female'
+			var interests = profile[0].interests.split(',')
+			Q.fetchoneMRowNot('profiles', ['username', 'gender', 'city', 'interests', 'suspended', 'popularity', 'bio'], ['gender', 'username'], [gender, username], [bi, username], (err, bMatch) => {
+				if (bMatch && bMatch.length > 0) {
+					var gMatch = []
+					var bloc = new Promise ((resolve, reject) => {
+						Q.fetchone('blocked', ['username'], 'blocker', username, (err, block) => {
+							if (block && block.length > 0)
+								resolve(block)
+							else
+								resolve(null)
+						})
+					})
+					bloc.then(block => {
+						var flag = []
+						for (let i in block)
+							flag.push(block[i].username)
+						for (let i in bMatch) {
+							if (bMatch[i].suspended === 0 && !flag.includes(bMatch[i].username))
+								gMatch.push(bMatch[i])
+						}
+						for (let i in gMatch) {
+							let ptags = gMatch[i].interests.split(',')
+							for (let j in ptags) {
+								if (interests.includes(ptags[j]) && gMatch[i].city === profile[0].city && gMatch[i].popularity >= 5 && !locals.includes(gMatch[i])) 
+									locals.push(gMatch[i])
+							}
+						}
+						for (let i in gMatch) {
+							let ptags = gMatch[i].interests.split(',')
+							for (let j in ptags) {
+								if (interests.includes(ptags[j]) && gMatch[i].city === profile[0].city && !locals.includes(gMatch[i])) 
+									locals.push(gMatch[i])
+							}
+						}
+						for (let i in gMatch) {
+								if (gMatch[i].city === profile[0].city && gMatch[i].popularity >= 5 && !locals.includes(gMatch[i])) 
+									locals.push(gMatch[i])
+						}
+						for (let i in gMatch) {
+								if (gMatch[i].city === profile[0].city && !locals.includes(gMatch[i])) 
+									locals.push(gMatch[i])
+						}
+						for (let i in gMatch) {
+							let ptags = gMatch[i].interests.split(',')
+							for (let j in ptags) {
+								if (interests.includes(ptags[j]) && !locals.includes(gMatch[i])) 
+									locals.push(gMatch[i])
+							}
+						}
+						callback(null, locals)
+					})
+				} else
+					callback('no matches in your area')
+			})
+		} else
+			callback('no preference')
+	})
+}
+
+Browse.filterNoti = (user, results, callback) => {
+	Q.fetchone('blocked', ['username'], 'blocker', user, (err, block) => {
+		if (err)
+			callback(err)
+		else if (block.length > 0) {
+			var flag = []
+			var clean = []
+			for (let i in block)
+				flag.push(block[i].username)
+			for (let i in results) {
+				if (!flag.includes(results[i].sender))
+					clean.push(results[i])
+			}
+			callback(null, clean)
+		} else
+			callback(null, results)
+	})
+}
+
+Browse.filterBlock = (user, results, callback) => {
+	Q.fetchone('blocked', ['username'], 'blocker', user, (err, block) => {
+		if (err)
+			callback(err)
+		else if (block.length > 0) {
+			var flag = []
+			var clean = []
+			for (let i in block)
+				flag.push(block[i].username)
+			for (let i in results) {
+				if (!flag.includes(results[i].username))
+					clean.push(results[i])
+			}
+			callback(null, clean)
+		} else
+			callback(null, results)
+	})
+}
+
+Browse.search = (search, callback) => {
+	var pars = ['username', 'gender', 'city', 'bio']
+	var no = 'no matches found'
+	if (search.filter === 'age') {
+	  S.ageRange(search.find, (err, exp, range) => {
+			if (err)
+				callback(err)
+			else if (exp) {
+				Q.fetchone('profiles', pars, 'age', exp, (err, profiles) => {
+					if (err)
+						callback(err)
+					else if (profiles.length > 0)
+						callback(null, profiles)
+					else
+						callback(no)
+				})
+			} else if (range) {
+				Q.fetchoneRange('profiles', pars, 'age', range[0], range[1], (err, profiles) => {
+				if (err)
+					callback(err)
+				else
+					callback(null, profiles)
+				})
+			}
+		})
+	} else if (search.filter === "popularity"){
+		S.popRange(search.find, (err, exp, range) => {
+			if (err)
+				callback(err)
+			else if (exp) {
+				Q.fetchone('profiles', pars, 'popularity', exp, (err, profiles) => {
+					if (err)
+						callback(err)
+					else if (profiles.length > 0)
+						callback(null, profiles)
+					else
+						callback(no)
+				})
+			} else if (range) {
+				Q.fetchoneRange('profiles', pars, 'popularity', range[0], range[1], (err, profiles) => {
+					if (err)
+						callback(err)
+					else if (profiles.length > 0)
+						callback(null, profiles)
+					else
+						callback(no)
+				})
+			}
+		})
+	} else if (search.filter === "city"){
+		S.locate(search.find, (err, city) => {
+			if (err)
+				callback(err)
+			Q.fetchone('profiles', pars, 'city', city, (err, profiles) => {
+				if (err)
+					callback(err)
+				else if (profiles.length > 0)
+					callback(null, profiles)
+				else
+					callback(no)
+			})
+		})
+	} else if (search.filter === "interests"){
+		S.tags(search.find, (err, range) => {
+			if (err)
+				callback(err)
+			Q.fetchoneMOrRows('interests', ['user_list'], ['interest'], range, (err, list) => {
+				if (err)
+					callback(err)
+				else if (list) {
+					var users = []
+					for (let a in list) {
+						var data = list[a].user_list.split(',')
+						for (let i in data) {
+							if (!users.includes(data[i]))
+								users.push(data[i])
+						}
+					}
+					if (users.length > 0) {
+						Q.fetchoneMOrRows('profiles', pars, ['id'], users, (err, profiles) => {
+							if (err)
+								callback(err)
+							else if (profiles.length > 0)
+								callback(null, profiles)
+							else
+								callback(no)
+						})
+					} else
+					callback(no)
+				}
+			})
+		})
+	}
 }
 
 module.exports = Browse

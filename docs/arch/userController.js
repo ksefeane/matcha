@@ -50,73 +50,100 @@ exports.list_users = (req, res) => {
 		res.render('index', pars)
 	})
 	.catch(e => {
-		 pars.e = e
 		 console.log(e)
 		 res.render('index', pars)
 	})
-}
-
-exports.search_users = (req, res) => {
-	var token = req.session.token
-	var adminToken = req.session.adminToken
-	var user = req.session.user
-	var pars = {token: token, adminToken: adminToken, user: user, suggestions: null}
-	let searchSuggestions = new Promise ((resolve, reject) => {
-		B.findLocals(user, (err, locals) => {
-			if (err)
-				reject(err)
-			else
-				resolve(locals)
+	/*	findGender.then((found, not) => {
+		console.log(found)
+	})
+	let filter = new Promise ((y, n) => {
+		Q.fetchall("profiles", (err, data) => {
+			if (err) {
+				console.log(err)
+			}
+			else if (data) 
+				y(data)
 		})
 	})
-	searchSuggestions.then((locals) => {
-		pars.suggestions = locals
-		res.render('index', pars)
-	})
-	.catch(e => {
-		 pars.e = e
-		 console.log(e)
-		 res.render('index', pars)
-	})
-}
-
-exports.find_users = (req, res) => {
-	var search = req.body
-	var token = req.session.token
-	var adminToken = req.session.adminToken
-	var user = req.session.user
-	var pars = {token: token, adminToken: adminToken, user: user, suggestions: null}
-	let searchSuggestions = new Promise ((resolve, reject) => {
-		B.search(search, (err, found) => {
-			if (err)
-				reject(err)
-			else {
-				B.filterBlock(user, found, (err, clean) => {
-					if (err)
-						reject(err)
-					else
-						resolve(clean)
+	filter.then(data => {
+		if (data.length > 0) {
+			let distcalc = new Promise((resolve, reject) => {
+				key.calculateDistance(req.session.user, data, (err, result) => {
+					if (err) {
+						console.log(err)
+						res.render('index', pars)
+					}
+					else if (result) {
+						resolve(result)
+					}
 				})
+			})
+			distcalc.then(outcome => {
+				let listDistances = new Promise ((resolve, reject) => {
+					Q.fetchall(req.session.user, (err, rows) => {
+						if (err) {
+							console.log(err)
+							res.render('index', pars)
+						}
+						else if (rows) {
+							pars.suggestions = rows
+							resolve(rows)
+						}
+					})
+				})
+				listDistances.then(rows => {
+					if (rows.length > 0) {
+						Q.countRows(req.session.user, (err, result) => {
+							if (err) {
+								console.log(err)
+							}
+							else {
+							}
+						})
+					}
+				})
+			}).catch(err => {
+				throw(err)
+			})
+		}
+		else {
+			res.render('index', pars)
+		}
+		Q.tableExists(req.session.user, (err, result) => {
+			if (err) {
+				console.log("tableExists error : ", err)
+			}
+			else if (result === 1){
+				let cached = new Promise((resolve, reject) => {
+					let orderCol = 'distance, sharedInterestsCount DESC, popularity DESC'
+					Q.fetchallOB(req.session.user, orderCol, (error, rows) => {
+						if (error) {
+							console.log(error)
+							res.render('index', pars)
+						}
+						else if (rows) {
+							pars.suggestions = rows
+							resolve(rows)
+						}
+					})
+				})
+				cached.then(rows => {
+					res.render('index', pars)
+				}).catch(err => {console.log(err)})
+			}
+			else {
+				res.render('index', pars)
 			}
 		})
-	})
-	searchSuggestions.then((found) => {
-		pars.suggestions = found
-		res.render('index', pars)
-	})
-	.catch(e => {
-		pars.e = e
-		console.log(e)
-		res.render('index', pars)
-	})
+		
+	})*/
 }
 
 exports.formSignup = (req, res) => {
-	var i = {username: null, first_name: null, last_name: null, email: null}
 	if (req.session.token)
 		res.redirect('/logout')
 	else
-		res.render('signup', {i: i})
+		res.render('signup')
 }
 
 exports.registerUser = (req, res) => {
@@ -124,13 +151,13 @@ exports.registerUser = (req, res) => {
 	User.validate(newUser, (err, result) => {
 		if (err) {
 			console.log("registration failed", err)
-			res.render('signup', {i: newUser, e: err})
+			res.redirect('/signup')
 		}
 		else {
 			User.check(newUser, (err, result) => {
 				if (err) {
 					console.log("registration failed", err)
-					res.render('signup', {i: newUser, e: err})
+					res.redirect('/signup')
 				}
 				else {
 					User.create(newUser, (err, result) => {
@@ -138,7 +165,7 @@ exports.registerUser = (req, res) => {
 							console.log(err)
 						else {
 							console.log("registration successful (please check email for verification link)")
-							res.render('login', {e: 'registration successful (please check email for verification link)'})
+							res.redirect('/')
 						}
 					})
 				}
@@ -181,7 +208,7 @@ exports.loginUser = (req, res, next) => {
 		}).catch(err => { throw(err)})
 	}).catch(err => { 
 		console.log(err)
-		res.render('login', {e: err})
+		res.redirect('/login')
 	})
 	/* eoc */
 }

@@ -6,7 +6,7 @@ var Secure = function(){}
 Secure.password = (pass, callback) => {
 	var msg = "password must contain at least one "
 	if (pass.length < 8)
-		callback("password too short", null)
+		callback("password too short (must contain atleast 8 characters)", null)
 	else if (pass.search(/[0-9]/) < 0)
 		callback(msg+"digit")
 	else if (pass.search(/[A-Z]/) < 0)
@@ -30,10 +30,10 @@ Secure.string = (field, str, callback) => {
 
 Secure.strage = (str, callback) => {
 	if (str.length < 1 || str.length > 3 || !str.match(/^[0-9]+$/))
-		callback("please enter a valid number", null)
+		callback("please enter a valid age", null)
 	else if (parseInt(str) < 18)
 		callback("you must be over 18 to create a profile", null)
-	else if (parseInt(str) > 121)
+	else if (parseInt(str) > 100)
 		callback("how are you still alive?")
 	else
 		callback(null, str)
@@ -118,6 +118,41 @@ Secure.findHash = (pass, hash, callback) => {
 Secure.createToken = (pass, callback) => {
 	var c = crypto.SHA256(pass+Date.now(), 'test').toString()
 	callback(c)
+}
+
+Secure.ageRange = (age, callback) => {
+	var ar = age.split('-')
+	var msg = null
+	if (ar.length > 2)
+		msg = 'age must be less than 100, separated by a single dash'
+	for (let i in ar) {
+		if (ar[i].length < 1 || ar[i].length > 2 || ar[i] > 100 || !ar[i].match(/^[0-9]+$/))
+			msg = 'age must be less than 100, separated by a single dash'
+	}
+	if (msg)
+		callback(msg, null, null)
+	else if (ar.length === 1)
+		callback(null, ar, null)
+	else
+		callback(null, null, ar)
+
+}
+
+Secure.popRange = (pop, callback) => {
+	var ar = pop.split('-')
+	var msg = null
+	if (ar.length > 2)
+		msg = 'popularity must be less than 10, separated by a single dash'
+	for (let i in ar) {
+		if (ar[i].length < 1 || ar[i].length > 2 || ar[i] > 10 || !ar[i].match(/^[0-9]+$/))
+			msg = 'popularity must be less than 10, separated by a single dash'
+	}
+	if (msg)
+		callback(msg, null, null)
+	else if (ar.length === 1)
+		callback(null, ar, null)
+	else
+		callback(null, null, ar)
 }
 
 module.exports = Secure

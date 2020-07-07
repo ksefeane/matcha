@@ -2,15 +2,32 @@
 <h2>registration</h2><br>
 <form action="/signup" method="post">
 	<label for="username">username</label><br>
-	<input type="text" id="username" name="username"><br>
+	<input type="text" id="username" name="username" 
+	required value="<%=i.username%>"
+	> 
+	<%if (e && e.username) {%><br><span style="color:red"><%=e.username%></span><%}%>
+	<br>
 	<label for="first_name">first name</label><br>
-	<input type="text" id="first_name" name="first_name"><br>
+	<input type="text" id="first_name" name="first_name"
+	required value="<%=i.first_name%>"
+	>
+	<%if (e && e.first_name) {%><br><span style="color:red"><%=e.first_name%></span><%}%>
+	<br>
 	<label for="last_name">last name</label><br>
-	<input type="text" id="last_name" name="last_name"><br>
+	<input type="text" id="last_name" name="last_name"
+	required value="<%=i.last_name%>"
+	>
+	<%if (e && e.last_name) {%><br><span style="color:red"><%=e.last_name%></span><%}%>
+	<br>
 	<label for="email">email</label><br>
-	<input type="text" id="email" name="email"><br>		
+	<input type="text" id="email" name="email"
+	required value="<%=i.email%>"
+	>
+	<%if (e && e.email) {%><br><span style="color:red"><%=e.email%></span><%}%>
+	<br>		
 	<label for="password">password</label><br>
-	<input type="password" id="password" name="password"><br>
+	<input type="password" id="password" name="password">
+	<%if (e && e.password) {%><br><span style="color:red"><%=e.password%></span><%}%>
 	<br>
 	<input type="submit" value="submit">
 </form>

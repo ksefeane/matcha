@@ -1,9 +1,6 @@
 <%- include ('partials/header') %>
-<ul id="messages"></ul>
+<h5>history of likes</h5>
 <% for (let i in likes) {%>
 	<a href='/p/<%=likes[i].username%>'><li class="list-group-item"><%=likes[i].username%></li></a>
 <%}%>
-<script src="/socket.io/socket.io.js"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="/js/test.js"></script>
 <%- include ('partials/footer') %>
