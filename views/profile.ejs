@@ -20,8 +20,8 @@
 			<p><%= profile.country %></p>
 			<sup class="text-warning">bio</sup>
 			<p><%= profile.bio %></p>
-			<a href='/p/upload' class="btn bg-danger">upload photos</a></p>
-			<a href='/p' class="btn bg-danger">edit profile</a></br>
+			<a href='/p/upload' class="btn bg-danger" id="but">upload photos</a></p>
+			<a href='/p' class="btn bg-danger" id="but">edit profile</a></br>
 			<% if (adminToken) {%>
 			<a href='/admin'>admin</a></p>
 			<%}%>
@@ -40,5 +40,27 @@
 		<!-- js include for async admin verification -->
 		<script src="/js/admin.js"></script>
 	<!-- eoc -->
+<style>
+	body {
+        font-family: "Times New Roman", Times, serif;
+    text-align: center;
+    background-color: #FF6347;
+}
+
+footer{
+        font-style: italic;
+}
+
+#brand{
+
+  font-size: 35px;
+  font-style: oblique;
+}
+
+#but{
+	background-color: #FF6347;
+}
+</style>
+
 
 <%- include ('partials/footer') %>

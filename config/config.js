@@ -4,7 +4,7 @@ var config = {
 	logins: {
 		host: 'localhost',
 		user: 'root',
-		password: ''
+		password: 'zandilem'
 	},
 	db: 'matcha_db'
 }

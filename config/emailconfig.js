@@ -2,7 +2,7 @@ const elogs = {
 	service: 'gmail',
 	auth: {
 		user: 'mahbabiez@gmail.com',
-		pass: 'pass'
+		pass: 'bokunolovers'
 	}
 }
 

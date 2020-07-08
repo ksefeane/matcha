@@ -3,4 +3,16 @@
 <% for (let i in likes) {%>
 	<a href='/p/<%=likes[i].username%>'><li class="list-group-item"><%=likes[i].username%></li></a>
 <%}%>
+
+<style>
+body {
+        font-family: "Times New Roman", Times, serif;
+    text-align: center;
+    background-color: #FF6347;
+}
+
+footer{
+        font-style: italic;
+}
+</style>
 <%- include ('partials/footer') %>
