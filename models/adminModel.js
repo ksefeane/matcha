@@ -1,6 +1,7 @@
 const Q = require('./queryModel')
 const gen = require('./keyGeneratorModel')
 const S = require ('./securityModel')
+const Profile = require('./profileModel')
 
 exports.parseForm = (form, callback) => {
     count = parseInt(form.testAccounts, 10)
@@ -55,7 +56,6 @@ exports.genUser = (callback) => {
                 unhash : `${passes[0]}`,
                 age : "",
                 gender : "",
-                //orientation : "",
                 preference : "",
                 interests : "",
                 city : "",
@@ -86,7 +86,6 @@ exports.genUser = (callback) => {
             gen.genEmail((err, mail) => { if(err) { rej(err) } else { user.email = mail } })
             gen.genAge((err, old) => { if (err) { rej(err) } else { user.age = old } })
             gen.genSex((err, sex) => { if (err) { rej(err) } else { user.gender = sex } })
-            //gen.genOrientation((err, type) => { if (err) { rej(err) } else { user.orientation = type } })
             gen.genPreference((err, pref) => { if (err) { rej(err) } else { user.preference = pref } })
             gen.genInterests((err, inter) => { if (err) { rej(err) } else { user.interests = inter } })
             gen.genBio((err, b) => { if (err) { rej(err) } else { user.bio = b } })
@@ -116,10 +115,24 @@ exports.genUser = (callback) => {
         Q.insert("profiles", pParams, pVals, (err, res) => { if (err) { throw(err) } else { /*console.log(res)*/ } })
         Q.fetchone("users", "id", 'username', user.username, (err, res) => {
             if (res && res.length > 0) {
-                Q.insert("test", ['username'], user.username, (error, result) => {
-                    if (error)
-                        throw (error)
+                let split = new Promise((resolve, reject) => {
+                    S.tags(user.interests, (err, res) => {
+                        if (err) {
+                            reject(err)
+                        }
+                        else {
+                        user.interests = res
+                        resolve(user)
+                        }
+                    })
                 })
+                split.then(user => {
+                    Profile.interests(res[0].id, user.interests, (error, result) => {
+                        if (error)
+                            throw (error)
+                    })
+                })
+                
             }
         })
         callback(null, user)

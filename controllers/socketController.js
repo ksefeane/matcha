@@ -48,5 +48,5 @@ exports.open = (req, res, next) => {
    		console.log(`socket closed [${user} -> ${socket.id}]`)
 		})
 	})
-	res.redirect('/notifications')
+	res.redirect('/')
 }

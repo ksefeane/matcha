@@ -216,7 +216,7 @@ Browse.findLocals = (username, callback) => {
 			else if(profile[0].preference === 'both')
 				bi = 'female'
 			var interests = profile[0].interests.split(',')
-			Q.fetchoneMRowNot('profiles', ['username', 'gender', 'city', 'interests', 'suspended', 'popularity', 'bio'], ['gender', 'username'], [gender, username], [bi, username], (err, bMatch) => {
+			Q.fetchoneMRowNot('profiles', ['username', 'age', 'gender', 'city', 'interests', 'suspended', 'popularity', 'bio'], ['gender', 'username'], [gender, username], [bi, username], (err, bMatch) => {
 				if (bMatch && bMatch.length > 0) {
 					var gMatch = []
 					var bloc = new Promise ((resolve, reject) => {
@@ -264,6 +264,10 @@ Browse.findLocals = (username, callback) => {
 									locals.push(gMatch[i])
 							}
 						}
+						for (let i in gMatch) {
+							if (!locals.includes(gMatch[i]))
+								locals.push(gMatch[i])
+						}
 						callback(null, locals)
 					})
 				} else
@@ -272,6 +276,95 @@ Browse.findLocals = (username, callback) => {
 		} else
 			callback('no preference')
 	})
+}
+
+Browse.filterResults = (res, sort, callback) => {
+	var no = 'no matches found'
+	var pure = []
+	if (sort.sort === 'age') {
+	  S.ageRange(sort.by, (err, exp, range) => {
+			if (err)
+				callback(err)
+			else if (exp) {
+				for (let i in res) {
+					if (res[i].age === exp)
+						pure.push(res[i])
+				}
+				if (pure.length > 0)
+					callback(null, pure)
+				else
+					callback(no)
+			} else if (range) {
+				for (let i in res) {
+					if (res[i].age > range[0] && res[i].age < range[1])
+						pure.push(res[i])
+				}
+				if (pure.length > 0)
+					callback(null, pure)
+				else
+					callback(no)
+			}
+		})
+	} else if (sort.sort === "popularity"){
+		S.popRange(sort.by, (err, exp, range) => {
+			if (err)
+				callback(err)
+			else if (exp) {
+				for (let i in res) {
+					if (res[i].popularity === exp)
+						pure.push(res[i])
+				}
+				if (pure.length > 0)
+					callback(null, pure)
+				else
+					callback(no)
+
+			} else if (range) {
+				for (let i in res) {
+					if (res[i].popularity > range[0] && res[i].popularity < range[1])
+						pure.push(res[i])
+				}
+				if (pure.length > 0)
+					callback(null, pure)
+				else
+					callback(no)
+			}
+		})
+	} else if (sort.sort === "city"){
+		S.locate(sort.by, (err, city) => {
+			if (err)
+				callback(err)
+			else {
+				for (let i in res) {
+					if (res[i].city === city)
+						pure.push(res[i])
+				}
+				if (pure.length > 0)
+					callback(null, pure)
+				else
+					callback(no)
+			}
+		})
+	} else if (sort.sort === "interests"){
+		S.tags(sort.by, (err, range) => {
+			if (err)
+				callback(err)
+			else {
+				var interests = sort.by.split(',')
+				for (let i in interests) {
+					for (let a in res) {
+						var data = res[a].interests.split(',')
+						if (data.includes(interests[i]) && !pure.includes(res[a]))
+							pure.push(res[a])
+					}
+				}
+				if (pure.length > 0)
+					callback(null, pure)
+				else
+					callback(no)
+			}
+		})
+	}
 }
 
 Browse.filterNoti = (user, results, callback) => {
@@ -313,7 +406,7 @@ Browse.filterBlock = (user, results, callback) => {
 }
 
 Browse.search = (search, callback) => {
-	var pars = ['username', 'gender', 'city', 'bio']
+	var pars = ['username', 'gender', 'city', 'interests','bio']
 	var no = 'no matches found'
 	if (search.filter === 'age') {
 	  S.ageRange(search.find, (err, exp, range) => {

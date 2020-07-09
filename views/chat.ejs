@@ -1,26 +1,22 @@
 <%- include ('partials/header') %>
-<%- include ('partials/head')%>
-<% for (let i in chats) {%>
-	<small><%=chats[i].sender%></small></br><h6><%=chats[i].message%></h6>
-<%}%>
-<h6 id="messages"></h6>
-<form action="">
-	<input type="hidden" id="receiver" value="<%=receiver%>">
-	<input type="hidden" id="user" value="<%=user%>">
-	<input id="m">
-	<button>send</button>
-</form></p>
+<div width="200">
+	<% for (let i in chats) {%>
+		<small class="text-warning"><%=chats[i].sender%></small></br>
+		<h6 class="text-white"><%=chats[i].message%></h6>
+	<%}%>
+	<h6 id="messages"></h6>
+	<form action="" class="form-inline">
+		<input type="hidden" id="receiver" value="<%=receiver%>">
+		<input type="hidden" id="user" value="<%=user%>">
+		<div class="input-group">
+			<input type="text" id="m" class="form-control">
+			<div class="input-group-append">
+				<button class="btn btn-outline-info bg-light border-left-0 border">
+					<i class="fa fa-send"></i>
+				</button>
+			</div>
+		</div>
+	</form>
+</div>
 <script src="/js/chat.js"></script>
-
-<!--style>
-body {
-        font-family: "Times New Roman", Times, serif;
-    text-align: center;
-    background-color: #FF6347;
-}
-
-footer{
-        font-style: italic;
-}
-</style-->
 <%- include ('partials/footer') %>

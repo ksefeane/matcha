@@ -5,11 +5,12 @@ const profileController = require('../controllers/profileController')
 
 router.get('/', profileController.auth, userController.list_users)
 
-//router.get('/s', profileController.auth, userController.search_users)
+router.post('/', profileController.auth, userController.suggestions_param)
 
-router.post('/', profileController.auth, userController.find_users)
+router.get('/search/:filter/:find', profileController.auth, userController.search)
 
+router.post('/filter', profileController.auth, userController.filter)
 
-//router.get('/:map', userController.auth, visitorController.lost)
+router.post('/filter/:filter/:find', profileController.auth, userController.filter)
 
 module.exports = router

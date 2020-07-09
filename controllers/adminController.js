@@ -57,14 +57,10 @@ exports.processForm = (req, res) => {
         })
         accounts.then(result => {
             console.log(result)
-            //res.redirect('/')
         }).catch( err => {
             console.log(err.message)
-            //res.redirect('/')
         })
     }).catch( err => {
         console.log(err.message)
-        //res.redirect('/')
     })
-    //res.redirect('/')
 }

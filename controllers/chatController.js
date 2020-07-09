@@ -26,7 +26,7 @@ exports.auth = (req, res, next) => {
   		else if (data.length > 0)
   			next()
   		else
-  			res.redirect('/chat')
+  			res.redirect(`/p/${req.params.match}`)
 	})
 }
 

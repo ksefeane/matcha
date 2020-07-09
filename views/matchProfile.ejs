@@ -4,53 +4,32 @@
 <input type="hidden" id="receiver" value="<%=match.username%>">
 </form>
 
-<div class="card col mb-2">
-	<img src='/uploads/<%=match.username%>' height="500" onerror="this.onerror=null;this.src='/uploads/avatar.jpg'">
-	<div class="card-body bg-dark text-light">
-		
-		<sup class="text-warning">username</sup>
-		<p><%= match.username %></p>
-		<sup class="text-warning">login status</sup>
-		<p><%if (match.last_seen == 0) {%>
-online
-<%}else {%>
-offline (last seen: <%=match.last_seen%>)
-<%}%></p>
-
-		<sup class="text-warning">popularity</sup>
-		<p><%= match.popularity %>/10 rating</p>
-		<sup class="text-warning">age</sup>
-		<p><%= match.age %> years old</p>
-		<sup class="text-warning">gender</sup>
-		<p><%= match.gender %></p>
-		<sup class="text-warning">preference</sup>
-		<p><%= match.preference %></p>
-		<sup class="text-warning">interests</sup>
-		<p><%= match.interests %></p>
-		<sup class="text-warning">lives in</sup>
-		<p><%= match.city %>, <%= match.country %></p>
-		<sup class="text-warning">bio</sup>
-		<p><%= match.bio %></p>
+<div class="card col mb-2 bg-transparent" width="auto">
+	<img src='/uploads/<%=match.username%>' height="500" width="auto" onerror="this.onerror=null;this.src='/uploads/avatar.jpg'">
+	<div class="card-body card-img-overlay text-danger">
+		<h1 class="text-warning"><%=match.username%></h1>
+		<h3 class="btn bg-warning">
+			<%if (match.last_seen == 0) {%>
+				online
+			<%}else {%>
+				offline (last seen: <%=match.last_seen%>)
+			<%}%>
+		</h3></br>
+		<h3 class="btn bg-warning"><%= match.popularity %>/10 rating</h3></br>
+		<h3 class="btn bg-warning"><%= match.age %> years old</h3></br>
+		<h3 class="btn bg-warning"><%= match.gender %></h3></br>
+		<h3 class="btn bg-warning">interested in <%= match.preference %></h3></br>
+		<h3 class="btn bg-warning">likes <%= match.interests %></h3></br>
+		<h3 class="btn bg-warning"><%= match.city %>, <%= match.country %></h3></br>
+		<h3 class="btn bg-warning">"<%= match.bio %>"</h3></br>
 		<div>
 			<button class="block btn bg-danger" id="<%=match.username%>"> <% if (adminToken) {%> suspend <% } else {%> block <% } %> </button>
 			<button class="like btn bg-danger" id="<%=match.username%>">like</button>
+			<a href="/chat/<%=match.username%>" class="btn bg-info">chat</a>
 		</div>
-
 	</div>
-
 </div>
 <script src="/js/like.js"></script>
 <script src="/js/block.js"></script>
 <script src="/js/notify.js"></script>
-<style>
-body {
-        font-family: "Times New Roman", Times, serif;
-    text-align: center;
-    background-color: #FF6347;
-}
-
-footer{
-        font-style: italic;
-}
-</style>
 <%- include ('partials/footer') %>

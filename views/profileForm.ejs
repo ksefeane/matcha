@@ -1,58 +1,71 @@
 <%- include ('partials/header') %>
 <form action="/p" method="post">
-	<label for="age">age</label><br>
-	<input type="text" id="age" name="age" required value="<%=p.age %>">
-	<%if (e && e.age) {%><br><span style="color:red"><%=e.age%></span><%}%>
-	</br>		
+	<div class="form-group col-md-4">
+		<label for="age" class="text-warning">age</label><br>
+		<input type="text" id="age" name="age" class="form-control" required value="<%=p.age %>">
+		<%if (e && e.age) {%><span class="text-danger"><%=e.age%></span><%}%>
+	</div>
 	
-	<label for="gender">gender</label><br>
-	<input type="radio" id="male" name="gender" value="male" 
-	<%if(p.gender=="male"){%>checked<%}%>>
-	<label for="male">male</label>
-	<input type="radio" id="female" name="gender" value="female" 
-	<%if(p.gender=="female"){%>checked<%}%>>
-	<label for="female">female</label>
-	<%if (e && e.gender) {%><br><span style="color:red"><%=e.gender%></span><%}%>
-	<br>
+	<div class="form-group col-md-4">
+		<label for="gender" class="text-warning">gender</label><br>
+		<input type="radio" id="male" name="gender" value="male" 
+		<%if(p.gender=="male"){%>checked<%}%>>
+		<label for="male" class="text-warning">male</label>
+		<input type="radio" id="female" name="gender" value="female" 
+		<%if(p.gender=="female"){%>checked<%}%>>
+		<label for="female" class="text-warning">female</label>
+		<%if (e && e.gender) {%><span class="text-danger"><%=e.gender%></span><%}%>
+	</div>
 	
-	<label for="preference">preference</label><br>
-	<input type="radio" id="men" name="preference" value="men"
-	<%if(p.preference=="men"){%>checked<%}%>>
-	<label for="men">men</label>
-	<input type="radio" id="women" name="preference" value="women"
-	<%if(p.preference=="women"){%>checked<%}%>>
-	<label for="women">women</label>
-	<input type="radio" id="both" name="preference" value="both"
-	<%if(p.preference=="both"){%>checked<%}%>>
-	<label for="both">both</label>
-	<%if (e && e.preference) {%><br><span style="color:red"><%=e.preference%></span><%}%>
-	<br>
-
-	<label for="interests">interests</label><br>
-	<input type="text" id="interests" name="interests" required value="<%=p.interests%>">
-	<%if (e && e.interests) {%><br><span style="color:red"><%=e.interests%></span><%}%>
-	</br>
-
-	<label for="city">city</label><br>
-	<input type="text" id="city" name="city" maxlength="42" required value="<%=p.city%>">
-	<%if (e && e.locate) {%><br><span style="color:red"><%=e.locate%></span><%}%>
-	</br>
-
-	<label for="country">country</label><br>
-	<input type="text" id="country" name="country" maxlength="42" required value="<%=p.country%>">
-	<%if (e && e.locate2) {%><br><span style="color:red"><%=e.locate2%></span><%}%>
-	</br>
-
-	<label for="bio">bio</label><br>
-	<textarea id="bio" name="bio" rows="4" cols="23"><%=p.bio%></textarea>
-	<%if (e && e.bio) {%><br><span style="color:red"><%=e.bio%></span><%}%>
-	<br>
-
-	<label for="password">password</label><br>
-	<input type="password" id="password" name="password" required>
-	<%if (e && e.password) {%><br><span style="color:red"><%=e.password%></span><%}%>
-	</p>
-	<input type="submit" value="submit">
+	<div class="form-group col-md-4">
+		<label for="preference" class="text-warning">preference</label><br>
+		<input type="radio" id="men" name="preference" value="men"
+		<%if(p.preference=="men"){%>checked<%}%>>
+		<label for="men" class="text-warning">men</label>
+		<input type="radio" id="women" name="preference" value="women"
+		<%if(p.preference=="women"){%>checked<%}%>>
+		<label for="women" class="text-warning">women</label>
+		<input type="radio" id="both" name="preference" value="both"
+		<%if(p.preference=="both"){%>checked<%}%>>
+		<label for="both" class="text-warning">both</label>
+		<%if (e && e.preference) {%><span class="text-danger"><%=e.preference%></span><%}%>
+	</div>
+	
+	<div class="form-group col-md-4">
+		<label for="interests" class="text-warning">interests</label><br>
+		<input type="text" id="interests" name="interests" class="form-control" required value="<%=p.interests%>">
+		<%if (e && e.interests) {%><span class="text-danger"><%=e.interests%></span><%}%>
+	</div>
+	
+	<div class="form-group col-md-4">
+		<label for="city" class="text-warning">city</label><br>
+		<input type="text" id="city" name="city" maxlength="42" class="form-control" required value="<%=p.city%>">
+		<%if (e && e.locate) {%><span class="text-danger"><%=e.locate%></span><%}%>
+	</div>
+	
+	<div class="form-group col-md-4">
+		<label for="country" class="text-warning">country</label><br>
+		<input type="text" id="country" name="country" maxlength="42" class="form-control" required value="<%=p.country%>">
+		<%if (e && e.locate2) {%><span class="text-danger"><%=e.locate2%></span><%}%>
+	</div>
+	
+	<div class="form-group col-md-4">
+		<label for="bio" class="text-warning">bio</label><br>
+		<textarea id="bio" name="bio" rows="4" cols="23" class="form-control"><%=p.bio%></textarea>
+		<%if (e && e.bio) {%><span class="text-danger"><%=e.bio%></span><%}%>
+	</div>
+	
+	<div class="form-group col-md-4">
+		<label for="password" class="text-warning">password</label><br>
+		<input type="password" id="password" name="password" class="form-control" required>
+		<%if (e && e.password) {%><span class="text-danger"><%=e.password%></span><%}%>
+	</div>
+	
+	<div class="form-group col-md-4">
+		<input type="submit" value="submit" class="btn bg-danger">
+	</div>
+	
+		
 </form><br>
 
 <%- include ('partials/footer') %>

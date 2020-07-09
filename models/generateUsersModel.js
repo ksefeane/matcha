@@ -82,26 +82,21 @@ exports.initTestAccounts = (adminName, count, callback) => {
     verify.then(res => {
         if (res && res[0].admin) {
             let promise = new Promise ((res, rej) => {
-                var i
-                for (i = 0; i < count; i++) {
-                    setTimeout((i) => {
                         admod.genUser((fail, succeed)  => {
                             if (fail) { rej(fail) }
                             else {
-                                console.log(`new user [${i + 1}]: ${succeed.username}  password : ${succeed.unhash} created`)
-                                //res(i)
-                                if (i == count - 1) {
-                                    setTimeout(() =>{
-                                        res(count)
-                                    }, 10)
-                                }
+                                console.log(`new user: ${succeed.username}  password : ${succeed.unhash} created`)
+                                res(succeed)
                             }
                         })
-                    }, (i + 1) * 50, i)
-                }
             })
-            promise.then(count => { 
-                callback(null, `${count} test-accounts created successfully`) 
+            promise.then(user => {
+                if (count > 1) {
+                    exports.initTestAccounts(adminName, --count, callback)
+                }
+                else {
+                    callback(null, `test accounts created successfully`) 
+                }
             }).catch(err => callback(err, null))
         }
         else {

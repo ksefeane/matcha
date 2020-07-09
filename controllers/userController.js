@@ -56,36 +56,68 @@ exports.list_users = (req, res) => {
 	})
 }
 
-exports.search_users = (req, res) => {
+exports.suggestions_param = (req, res, next) => {
+	if (req.body.find)
+		res.redirect(`/search/${req.body.filter}/${req.body.find}`)
+	else
+		res.redirect('/')
+}
+
+exports.filter = (req, res) => {
+	var filter = req.body
 	var token = req.session.token
 	var adminToken = req.session.adminToken
 	var user = req.session.user
 	var pars = {token: token, adminToken: adminToken, user: user, suggestions: null}
-	let searchSuggestions = new Promise ((resolve, reject) => {
-		B.findLocals(user, (err, locals) => {
-			if (err)
-				reject(err)
-			else
-				resolve(locals)
-		})
+	let payload = new Promise ((resolve, reject) => {
+		 if (filter.newfilter) {
+		 	var search = {filter: filter.newfilter, find: filter.newfind}
+			B.search(search, (err, found) => {
+				if (err)
+					reject(err)
+				else
+					resolve(found)
+			})
+		} else {
+			B.findLocals(user, (err, locals) => {
+				if (err)
+					reject(err)
+				else
+					resolve(locals)
+			})
+		}
 	})
-	searchSuggestions.then((locals) => {
-		pars.suggestions = locals
-		res.render('index', pars)
+	payload.then((results) => {
+		var sort = {sort: filter.sort, by: filter.by}
+		var funnel = new Promise((resolve, reject) => {
+			B.filterResults(results, sort, (err, pure) => {
+				 if (err)
+				 	reject(err)
+				 else
+					resolve(pure)
+			})
+		})
+		funnel.then((pure) => {
+			pars.suggestions = pure
+			res.render('index', pars)
+		})
+		.catch(e => {
+		 	pars.e = e
+		 	res.render('index', pars)
+		})
 	})
 	.catch(e => {
 		 pars.e = e
-		 console.log(e)
 		 res.render('index', pars)
 	})
 }
 
-exports.find_users = (req, res) => {
-	var search = req.body
+exports.search = (req, res) => {
+	var search = req.params
 	var token = req.session.token
 	var adminToken = req.session.adminToken
 	var user = req.session.user
-	var pars = {token: token, adminToken: adminToken, user: user, suggestions: null}
+	var pars = {token: token, adminToken: adminToken, user: user, suggestions: null, search: search}
 	let searchSuggestions = new Promise ((resolve, reject) => {
 		B.search(search, (err, found) => {
 			if (err)
@@ -102,14 +134,14 @@ exports.find_users = (req, res) => {
 	})
 	searchSuggestions.then((found) => {
 		pars.suggestions = found
-		res.render('index', pars)
+		res.render('search', pars)
 	})
 	.catch(e => {
 		pars.e = e
-		console.log(e)
-		res.render('index', pars)
+		res.render('search', pars)
 	})
 }
+
 
 exports.formSignup = (req, res) => {
 	var i = {username: null, first_name: null, last_name: null, email: null}

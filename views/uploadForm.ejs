@@ -1,20 +1,11 @@
 <%- include ('partials/header') %>
 <form action="/p/upload" method="post" enctype="multipart/form-data">
-	<label for="photos"><h5>upload photos</h5></label><br>
-	<input type="file" id="photos" name="photos"><br><br>
-	<input type="submit" value="submit">
-</form><br>
-
-<style>
-body {
-    font-family: "Times New Roman", Times, serif;
-    text-align: center;
-    background-color: #FF6347;
-}
-footer{
-        font-style: italic;
-}
-
-
-</style>
+	<div class="form-group col-md-4">
+		<label for="photos"><h5 class="text-warning">upload photos</h5></label><br>
+		<input type="file" id="photos" name="photos" class="form-control-file bg-secondary btn">
+	</div>
+	<div class="form-group col-md-4">
+		<input type="submit" value="submit" class="btn bg-danger">
+	</div>
+</form>
 <%- include ('partials/footer') %>

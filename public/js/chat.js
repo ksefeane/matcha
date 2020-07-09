@@ -12,7 +12,7 @@ $('form').submit(function(e){
 })
 
 socket.on('chat message', function({s, r, msg}){
-	$('#messages').append($('<small>').text(`${s} `), $('<p>').text(msg))
+	$('#messages').append($('<small class="text-warning">').text(`${s} `), $('<h6 class="text-light">').text(msg))
 	window.scrollTo(0, document.body.scrollHeight)
 })
 window.scrollTo(0, document.body.scrollHeight)

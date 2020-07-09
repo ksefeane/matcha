@@ -1,6 +1,21 @@
 <%- include ('partials/header') %>
-<h3>matches</h3>
+<h3 class="text-warning">matches</h3>
+<div class="row row-cols-1 row-cols-md-4">
 <% for (let i in lovers) {%>
-	<a href='/chat/<%=lovers[i].liked%>'><li class="list-group-item"><%=lovers[i].liked%></li></a>
+	<div class="col mb-3">
+		<div class="card text-white bg-transparent">
+			<img src="/uploads/<%=lovers[i].liked%>" onerror="this.onerror=null;this.src='/uploads/avatar.jpg';" class="card-img" height="220">
+			<a href="/p/<%=lovers[i].liked%>" style="text-decoration:none">
+				<div class="card-body card-img-overlay text-danger">
+					<h2 class="text-warning"><%=lovers[i].liked%></h2>
+					<div class="align-self-md-end">
+						<a href="/p/<%=lovers[i].liked%>" class="btn bg-danger">profile</a>
+						<a href="/chat/<%=lovers[i].liked%>" class="btn bg-info">chat</a>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div>
 <%}%>
+</div>
 <%- include ('partials/footer') %>

@@ -1,6 +1,17 @@
 <%- include ('partials/header') %>
-<h5>history of visitors</h5>
-<% for (let i in visitors) {%>
-	<a href='/p/<%=visitors[i].visitor%>'><li class="list-group-item"><%=visitors[i].visitor%></li></a>
-<%}%>
+<h3 class="text-warning">history of visitors</h3>
+<div class="row row-cols-1 row-cols-md-4">
+	<% for (let i in visitors) {%>
+		<div class="col mb-3">
+			<div class="card text-white bg-transparent">
+				<img src="/uploads/<%=visitors[i].visitor%>" onerror="this.onerror=null;this.src='/uploads/avatar.jpg';" class="card-img" height="220">
+				<a href="/p/<%=visitors[i].visitor%>" style="text-decoration:none">
+					<div class="card-body card-img-overlay text-danger">
+						<h2 class="text-warning"><%=visitors[i].visitor%></h2>
+					</div>
+				</a>
+			</div>
+		</div>
+	<%}%>
+</div>
 <%- include ('partials/footer') %>

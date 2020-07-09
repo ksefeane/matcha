@@ -1,9 +1,45 @@
 <%- include ('partials/header') %>
+<form action="/filter" method="post" class="form-inline my-4">
+	<input type="hidden" id="newfilter" name="newfilter" value="<%=search.filter%>">
+	<input type="hidden" id="newfind" name="newfind" value="<%=search.find%>">
+	<div class="input-group">
+		<div class="input-group-prepend">
+			<select name="sort" id="sort" class="btn text-info btn-outline-secondary form-control bg-dark">
+				<option value="city">city</option>
+				<option value="age">age</option>
+				<option value="popularity">popularity</option>
+				<option value="interests">interests</option>
+			</select>
+		</div>
+		<input type="search" name="by" id="by" placeholder="filter..." class="form-control col-md-6">
+		<div class="input-group-append">
+			<button type="submit" class="btn btn-outline-info bg-light border-left-0 border"><i class="fa fa-filter"></i></button>
+		</div>
+	</div>
+</form>
+<%if (e) {%><span class="text-danger"><%=e%></span><%}%>
+
+<div class="row row-cols-1 row-cols-md-3">
 <% if (suggestions) { for (let i in suggestions) {%>
-	<a href='/p/<%=suggestions[i].username%>'>
-		<li class="list-group-item">
-			<div><%=suggestions[i].username%> - <%=suggestions[i].gender%> - <%=suggestions[i].city%></div>
-		</li>
-	</a>
+	<div class="col mb-2">
+		<div class="card text-white bg-transparent">
+			<img src="/uploads/<%=suggestions[i].username%>" id="pro" onerror="this.onerror=null;this.src='/uploads/avatar.jpg';" class="card-img" width="200" height="350">
+			<a href="/p/<%=suggestions[i].username%>" style="text-decoration:none">
+			<div class="card-body card-img-overlay text-danger">
+				<h2 class="text-warning"><%=suggestions[i].username%></h2>
+				<h3 class="btn bg-warning" style="opacity:0.8"><%=suggestions[i].gender%></h3><br>
+				<h3 class="btn bg-warning" style="opacity:0.8"><%=suggestions[i].city%></h3><br>
+				<h3 class="btn bg-warning" style="opacity:0.8"><%=suggestions[i].interests%></h3><br>
+				<div class="align-self-md-end">
+					<a href='/p/<%=suggestions[i].username%>' class="btn bg-danger">profile</a>
+					<a href='/chat/<%=suggestions[i].username%>' class="btn bg-info">chat</a>
+				</div>
+			</div>
+			</a>
+		</div>
+	</div>
+
 <%}}%>
+</div>
+
 <%- include ('partials/footer') %>

@@ -8,7 +8,6 @@ var https = require ("https")
 var Q = require ("./queryModel")
 var Geo = require ("./geoModel")
 var conn = require ("./connModel")
-//const { resolve } = require("path")
 var B = require ("./browseModel")
 
 
@@ -112,7 +111,7 @@ exports.genPreference = (callback) => {
 }
 
 exports.genInterests = (callback) => {
-    var interests = ""
+    var interests = "" 
     var chance = new Chance
 
     for (i = 0; i < (Math.floor(Math.random() * (4 - 1)) + 1); i++)
@@ -120,7 +119,7 @@ exports.genInterests = (callback) => {
         if (i > 0) {
             interests += ","
         }
-        interests += chance.animal({type: 'pet'}).toLowerCase()
+        interests += chance.pickone(['cans', 'babel', 'jokes', 'drugs', 'wildin', 'simpin'])
     }
     callback(null, interests)
 }

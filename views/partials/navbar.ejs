@@ -1,43 +1,57 @@
 <!DOCTYPE html>
-<link href="style.css" rel="stylesheet" type="text/css">
-
-<nav class="navbar navbar-expand navbar-dark bg-dark navbar-default navbar-fixed-top">
-  <a class="navbar-brand" href="/" id="brand" >matcha</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon" type="button"></span>
-  </button>
-
-  <form action="">
-  		<input type="hidden" id="user" value="<%=user%>">
-  </form>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-	 	<% if (token) { %>
-      	<a class="nav-item nav-link" href="/p/u">profile (<%=user%>)</a>
-      	<a class="nav-item nav-link" href="/chat">chat</a>
-      	<a class="nav-item nav-link" href="/visitors">visitors</a>
-      	<a class="nav-item nav-link" href="/visitors/likes">likes</a>
-      	<a class="nav-item nav-link" href="/notifications">notifications
-				<span class="notifications" id="<%=user%>"></span></a>
-         <a class="nav-item nav-link" href="/logout" id="logout">logout</a>
-         <form action="/" method="post">
-				<select name="filter" id="filter" class="">
-					<option value="city">city</option>
-					<option value="age">age</option>
-					<option value="popularity">popularity</option>
-					<option value="interests">interests</option>
-				</select>
-				<input type="text" name="find" id="find" placeholder="search..." size="10">
-				<input type="submit" value="search">
+<form action="">
+	<input type="hidden" id="user" value="<%=user%>">
+</form>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand btn text-danger" href="/">
+				<i class="fa fa-heartbeat text-danger"></i> matcha
+			</a>
+		</div>
+		<button type="button" class="navbar-toggler mr-sm-2 my-2" data-toggle="collapse" data-target="#navcol">
+				<i class="fa fa-bars text-danger"></i>
+		</button>
+		<div class="navbar-collapse collapse" id="navcol">
+			<ul class="nav navbar-nav">	
+				<% if (token) { %>
+					<li><a class="nav-link" href="/p/u">profile (<%=user%>)</a></li>
+					<li><a class="nav-item nav-link" href="/chat">chat</a></li>
+					<li><a class="nav-item nav-link" href="/visitors">visitors</a></li>
+					<li><a class="nav-item nav-link" href="/visitors/likes">likes</a></li>
+					<li>
+						<a class="nav-item nav-link" href="/notifications">
+							notifications <span class="notifications" id="<%=user%>"></span>
+						</a>
+					</li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+					<li><a class="nav-item nav-link" href="/logout" id="logout">logout</a></li>
+	 		</ul>
+	 		<form action="/" method="post" class="navbar-form form-inline">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<select name="filter" id="filter" class="btn text-info btn-outline-secondary form-control bg-dark">
+							<option value="city">city</option>
+							<option value="age">age</option>
+							<option value="popularity">popularity</option>
+							<option value="interests">interests</option>
+						</select>
+					</div>
+					<input type="search" name="find" id="find" placeholder="search..." class="form-control col-md-4" required>
+					<div class="input-group-append">
+						<button type="submit" class="btn btn-outline-info bg-light border-left-0 border"><i class="fa fa-search"></i></button>
+					</div>
+				</div>
 			</form>
-	 	<%}else { %>
-      	<a class="nav-item nav-link" href="/signup">signup</a>
-      	<a class="nav-item nav-link" href="/login">login</a>
-		<% } %>
-    </div>
-  </div>
-    <script src="/socket.io/socket.io.js"></script>
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="/js/navSocket.js"></script>
+	 				<%}else { %>
+			<ul class="nav navbar-nav navbar-right">
+					<li><a class="nav-item nav-link" href="/signup">signup</a></li>
+					<li><a class="nav-item nav-link" href="/login">login</a></li>
+				<% } %>
+			</ul>
+					</div>	
+	</div>
 </nav>
-
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/navSocket.js"></script>

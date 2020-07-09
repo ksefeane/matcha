@@ -1,22 +1,22 @@
 <%- include ('partials/header') %>
-<h5><a href="/chat">chats</a></h5>
+<h5><a href="/chat" class="text-warning" style="text-decoration:none">chats</a></h5>
 <% for (let a in chats) {%>
-	<a href='/chat/<%=chats[a]%>'><%=chats[a]%></a><br>
+	<a href='/chat/<%=chats[a]%>' class="btn bg-danger my-1"><%=chats[a]%></a>
 <%}%>
 <hr>
-<h5><a href="/chat">matches</a></h5>
+<h5><a href="/chat"class="text-warning" style="text-decoration:none">matches</a></h5>
 <% for (let a in matches) {%>
-	<a href='/chat/<%=matches[a]%>'><%=matches[a]%></a><br>
+	<a href='/chat/<%=matches[a]%>' class="btn bg-danger my-1"><%=matches[a]%></a>
 <%}%>
 <hr>
-<h5><a href="/visitors/likes">likes/unlikes</a></h5>
+<h5><a href="/visitors/likes"class="text-warning" style="text-decoration:none">likes/unlikes</a></h5>
 <% for (let a in likes) {%>
-	<a href='/p/<%=likes[a]%>'><%=likes[a]%></a><br>
+	<a href='/p/<%=likes[a]%>' class="btn bg-info my-1"><%=likes[a]%></a>
 <%}%>
 <hr>
-<h5><a href="/visitors">visits</a></h5>
+<h5><a href="/visitors"class="text-warning" style="text-decoration:none">visits</a></h5>
 <% for (let a in visits) {%>
-	<a href='/p/<%=visits[a]%>'><%=visits[a]%></a><br>
+	<a href='/p/<%=visits[a]%>' class="btn bg-info my-1"><%=visits[a]%></a>
 <%}%>
 <hr>
 <%- include ('partials/footer') %>
