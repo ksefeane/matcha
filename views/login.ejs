@@ -1,79 +1,40 @@
 <%- include ('partials/header') %>
-<!--<<<<<< HEAD
-<h2>login</h2><br>
-<form action="/login" method="post" class="form-signin">
-	<label for="username">username</label><br>
-	<input type="text" id="username" name="username"><br>
-	<label for="password">password</label><br>
-	<input type="password" id="password" name="password"><br>
-	<br>{%>
-=======-->
-<!--h2 class="text-warning">login</h2><br>
-<form action="/login" method="post" class="form-signin">
-	<div class="input-group col-md-4">
-		<label for="username" class="text-warning">username</label>
-		<input type="text" id="username" name="username" class="form-control">
-	</div>
-	<div class="input-group col-md-4">
-		<label for="password" class="text-warning">password</label>
-		<input type="password" id="password" name="password" class="form-control">
-	</div>
-	<% if (e) {%>
-		<p style="color:red"><%=e%></p>
-	<%}%>
-	<div class="form-group col-md-4">
-		<input type="submit" value="login" class="btn login_btn">
-	</div>
-</form><br>
-<a href="./f" class="text-warning">forgot password?</a-->
-
 <h2 class="text-warning">Login</h2><br>
-<div class="container h-100">
-        <div class="d-flex justify-content-center h-100">
-                <div class="user_card">
-                        <div class="d-flex justify-content-center">
-                                <div class="brand_logo_container">
-                                        <img src="favicon/download.png" class="brand_logo" alt="logo">
-                                </div>
-                        </div>
-                        <div class="f-flex justify-content-center form_container">
-                                <form action="/login" method="post" >
-                                        <div id="form-group col-md-4" class="input-group mb-2">
-                                                <!--div class="input-group-append">
-                                                        <-span class="input-group-text"><i class="fas fa-user"></i></span>
-                                                </div-->
-                                                        <label for="username" class="text-warning"></label><br>
-                                                        <input type="text" id="username" name="username" placeholder="username" class="input_field"><br>
-                                                </div>
-                                                <div class="input-group mb-2">
-                                                        <!--div class="input-group-append">
-                                                                <pan class="input-group-text"><i class="fas fa-key"></i><span>
-                                                        </div-->
-                                                        <label for="password"></label><br>
-                                                        <input type="password" id="password" name="password" placeholder="password"  class="input_field"><br>
-                                                </div>
-                                        </div>
-                                                <br>
-                                                <% if (e) {%>
-                                                        <p style="color:red"><%=e%></p>
-                                                <%}%>
-                                                <div class="d-flex justify-content-center mt-3 login_container">
-                                                        <!--button type="button" name="button" class="btn login_btn">Login</button-->
-
-                                                        <input type="submit" value="Login" class="btn login_btn">
-                                                </div>
-        <!--input type="submit" value="login"-->
-                                </form><br>
-
-
-                                <div class="d-flex justify-content-center links">
-                                        <a href="./f" class="text-warning" id="forgot">forgot password?</a>
-                                </div>
-                                </div>
-                                </div>
-                        </div>
-                </div>
-        </div>
+	<div class="container h-100">
+		<div class="d-flex justify-content-center h-100">
+			<div class="user_card">
+				<div class="d-flex justify-content-center">
+					<div class="brand_logo_container">
+						<img src="favicon/download.png" class="brand_logo" alt="logo">
+					</div>
+				</div>
+				<div class="f-flex justify-content-center form_container">
+					<form action="/login" method="post" >
+						<div id="form-group col-md-4" class="input-group mb-2">
+							<label for="username" class="text-warning"></label><br>
+								<input type="text" id="username" name="username" placeholder="username" class="input_field"><br>
+						</div>
+						<div class="input-group mb-2">
+							<label for="password"></label><br>
+								<input type="password" id="password" name="password" placeholder="password"  class="input_field"><br>
+						</div>
+					</div>
+					<br>
+						<% if (e) {%>
+					<p style="color:red"><%=e%></p>
+						<%}%>
+					<div class="d-flex justify-content-center mt-3 login_container">
+						<input type="submit" value="Login" class="btn login_btn">
+					</div>
+				</form><br>
+				<div class="d-flex justify-content-center links">
+					<a href="./f" class="text-warning" id="forgot">forgot password?</a>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		</div>
 </div>
 
 <%- include ('partials/footer') %>
