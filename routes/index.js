@@ -5,9 +5,9 @@ const profileController = require('../controllers/profileController')
 
 router.get('/', profileController.auth, userController.list_users)
 
-router.post('/', profileController.auth, userController.suggestions_param)
+router.post('/', userController.auth, userController.suggestions_param)
 
-router.get('/search/:filter/:find', profileController.auth, userController.search)
+router.get('/search/:filter/:find', userController.auth, userController.search)
 
 router.post('/filter', profileController.auth, userController.filter)
 
