@@ -105,6 +105,26 @@ exports.initTestAccounts = (adminName, count, callback) => {
     }).catch(err => callback(err, null))
 }
 
+exports.init = (count, callback) => {
+    let promise = new Promise ((res, rej) => {
+        admod.genUser((fail, succeed)  => {
+            if (fail) { rej(fail) }
+            else {
+                console.log(`new user: ${succeed.username}  password : ${succeed.unhash} created`)
+                res(succeed)
+            }
+        })
+    })
+    promise.then(user => {
+        if (count > 1) {
+            exports.init(--count, callback)
+        }
+        else {
+            callback(null, `test accounts created successfully`) 
+        }
+    }).catch(err => callback(err, null))
+}
+
 exports.sleep = (milliseconds) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds))
 }

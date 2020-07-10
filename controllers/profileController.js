@@ -217,6 +217,26 @@ exports.blockStatus = (req, res) => {
 	})
 }
 
+exports.blockHistory = (req, res) => {
+	var token = req.session.token
+	var adminToken = req.session.adminToken
+	let promise = new Promise((resolve, reject) => {
+		Q.fetchallOB('blocked', 'id DESC', (err, result) => {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				resolve(result)
+			}
+		})
+	})
+	promise.then(result => {
+		res.render('blocks', {blocked: result, token: token, adminToken: adminToken, user: req.session.user})
+	}).catch(err => {
+		console.log(err)
+	})
+}
+
 exports.formPhotos = (req, res) => {
 	var token = req.session.token
 	var adminToken = req.session.adminToken

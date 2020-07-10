@@ -37,7 +37,7 @@ var tables = {
 		"CREATE TABLE `interests` (" +
 		" `id` int(11) NOT NULL AUTO_INCREMENT," +
 		" `interest` varchar(20) NOT NULL," +
-		" `user_list` varchar(400)," +
+		" `user_list` varchar(2500)," +
 		" PRIMARY KEY (`id`)" +
 		") ENGINE=InnoDB"
 	),

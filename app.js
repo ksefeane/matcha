@@ -7,9 +7,42 @@ const session = require('client-sessions')
 //const dbc = require('./models/connModel')
 
 //init database
-const db = require('./models/dbModel')
-db.init()
-//db.tables()
+const key = require('./models/keyGeneratorModel')
+let promise = new Promise((res, rej) => {
+	const db = require('./models/dbModel')
+	db.init()
+	key.genPlaces(25, (error, success) => {
+		if (error) {
+			rej(error)
+		}
+		else {
+			console.log(success)
+			res(success)
+		}
+	})
+	//db.tables()	
+})
+
+//init test users
+promise.then(() => {
+	const testUsers = require ('./models/generateUsersModel')
+	const Q = require ('./models/queryModel')
+	Q.countRows('profiles', (error, result) => {
+		if (error) {
+			console.log(error)
+		} 
+		else if (result && result < 500) {
+			testUsers.init(500, (err, res) => {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					console.log(res)
+				}
+			})
+		}
+	})
+})
 
 //init app
 const app = express()
