@@ -316,7 +316,7 @@ Browse.filterResults = (res, sort, callback) => {
 				callback(err)
 			else if (exp) {
 				for (let i in res) {
-					if (res[i].age === exp)
+					if (res[i].age === exp[0])
 						pure.push(res[i])
 				}
 				if (pure.length > 0)
@@ -339,6 +339,7 @@ Browse.filterResults = (res, sort, callback) => {
 			if (err)
 				callback(err)
 			else if (exp) {
+				exp = parseInt(exp[0])
 				for (let i in res) {
 					if (res[i].popularity === exp)
 						pure.push(res[i])
@@ -347,10 +348,11 @@ Browse.filterResults = (res, sort, callback) => {
 					callback(null, pure)
 				else
 					callback(no)
-
 			} else if (range) {
+				range[0] = parseInt(range[0])
+				range[1] = parseInt(range[1])
 				for (let i in res) {
-					if (res[i].popularity > range[0] && res[i].popularity < range[1])
+					if (res[i].popularity >= range[0] && res[i].popularity <= range[1])
 						pure.push(res[i])
 				}
 				if (pure.length > 0)
@@ -436,7 +438,7 @@ Browse.filterBlock = (user, results, callback) => {
 }
 
 Browse.search = (search, callback) => {
-	var pars = ['username', 'gender', 'city', 'interests','bio']
+	var pars = ['username', 'age', 'gender', 'city', 'interests','bio']
 	var no = 'no matches found'
 	if (search.filter === 'age') {
 	  S.ageRange(search.find, (err, exp, range) => {
