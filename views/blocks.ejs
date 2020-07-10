@@ -2,10 +2,10 @@
 <h3 class="text-warning">block history</h3>
 <div>
 	<% for (let i in blocked) {%>
-		<div>
+		<div class="btn bg-danger">
 			<a href="/p/<%=blocked[i].username%>" style="text-decoration:none">
 				<div>
-					<h5 class="text-warning"><%=blocked[i].blocker%> blocked <%=blocked[i].username%></h5>
+					<h5 class="text-dark"><%=blocked[i].blocker%> blocked <%=blocked[i].username%></h5>
 				</div>
 			</a>
 		</div>

@@ -1,14 +1,14 @@
 <%- include ('partials/header') %>
 
 <form method="post" action="/admin">
-<label class="options">Generate Test Accounts</label><br>         
+<label class="options text-warning"><h4>Generate Test Accounts</h4></label><br>         
 <input type = "radio" name = "testAccounts" id = "min" value = "5" checked = "checked" class="options" />
-<label for = "min" class="options">5</label>
+<label for = "min" class="options text-warning">5</label>
 <input type = "radio" name = "testAccounts" id = "mod" value = "100" class="options" style="margin-left: 3%;" />
-<label for = "mod" class="options">100</label>
+<label for = "mod" class="options text-warning">100</label>
 <input type = "radio" name = "testAccounts" id = "max" value = "500" class="options" style="margin-left: 3%;" />
-<label for = "max" class="options" >500</label><br>
-<button class="options" id="go" type="submit">Go</button>
+<label for = "max" class="options text-warning" >500</label>
+<button class="options btn bg-danger ml-4" id="go" type="submit">Go</button>
 </form><br>
 <a href='/admin/blocks' class="btn bg-info my-1">block requests</a>
 <script src="/js/aForm.js"></script>
