@@ -364,6 +364,7 @@ Browse.filterResults = (res, sort, callback) => {
 			if (err)
 				callback(err)
 			else {
+				city = city.charAt(0).toUpperCase()+city.slice(1)
 				for (let i in res) {
 					if (res[i].city === city)
 						pure.push(res[i])
