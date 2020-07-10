@@ -4,10 +4,12 @@ const path = require('path')
 const session = require('client-sessions')
 
 //database connection
-//const dbc = require('./models/connModel')
+const dbc = require('./models/connModel')
+const db = require('./models/dbModel')
+db.init()
 
 //init database
-const key = require('./models/keyGeneratorModel')
+/*const key = require('./models/keyGeneratorModel')
 let promise = new Promise((res, rej) => {
 	const db = require('./models/dbModel')
 	db.init()
@@ -42,7 +44,7 @@ promise.then(() => {
 			})
 		}
 	})
-})
+})*/
 
 //init app
 const app = express()
