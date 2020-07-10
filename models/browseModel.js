@@ -278,6 +278,7 @@ Browse.findLocals = (username, callback) => {
 	})
 }
 
+//this is the conflict
 Browse.order = (data, sort, order, callback) => {
 	function compareValues(key, order = 'asc') {
 	  return function innerSort(a, b) {
