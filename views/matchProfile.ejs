@@ -7,7 +7,14 @@
 <div class="card col mb-2 bg-transparent" width="auto">
 	<img src='/uploads/<%=match.username%>' height="500" width="auto" onerror="this.onerror=null;this.src='/uploads/avatar.jpg'">
 	<div class="card-body card-img-overlay text-danger">
-		<h1 class="text-warning"><%=match.username%></h1>
+
+		<!--h1 class="text-warning"><%=match.username%></h1-->
+
+		<h1 class="text-warning"><%=match.username%> <%if (like) {%>
+		  <i class="text-danger fa fa-heart-o"></i>
+		<%}%>
+		</h1>
+
 		<h3 class="btn bg-warning">
 			<%if (match.last_seen == 0) {%>
 				online

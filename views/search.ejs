@@ -16,6 +16,15 @@
 			<button type="submit" class="btn btn-outline-info bg-light border-left-0 border"><i class="fa fa-filter"></i></button>
 		</div>
 	</div>
+  <!-- this div was a conflict resolve-->
+	<div class="form-group btn btn-transparent p-2">
+		<label for="order" class="btn text-dark p-0"></label>
+			<input type="radio" id="asc" name="order" value="asc" class="mr-2">
+			<label for="asc"><i class="text-info fa fa-sort-alpha-asc mr-2"></i></label>
+			<input type="radio" id="desc" name="order" value="desc" class="mr-2">
+			<label for="desc"><i class="text-info fa fa-sort-alpha-desc mr-2"></i></label>
+		</label>
+	</div>
 </form>
 <%if (e) {%><span class="text-danger"><%=e%></span><%}%>
 
@@ -28,6 +37,9 @@
 			<div class="card-body card-img-overlay text-danger">
 				<h2 class="text-warning"><%=suggestions[i].username%></h2>
 				<h3 class="btn bg-warning" style="opacity:0.8"><%=suggestions[i].gender%></h3><br>
+
+				<h3 class="btn bg-warning" style="opacity:0.8"><%=suggestions[i].age%></h3><br>
+
 				<h3 class="btn bg-warning" style="opacity:0.8"><%=suggestions[i].city%></h3><br>
 				<h3 class="btn bg-warning" style="opacity:0.8"><%=suggestions[i].interests%></h3><br>
 				<div class="align-self-md-end">

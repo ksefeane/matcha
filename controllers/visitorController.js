@@ -57,6 +57,7 @@ exports.notifications = (req, res) => {
 	var likes = null
 	var visits = null
 	let promise = new Promise ((resolve) => {
+		Q.deloneMRows('notifications', ['receiver', 'type'], [user, 'visit'], () => {})
 		Q.fetchoneMAndOr4('notifications', ['sender', 'type'], ['receiver', 'type'], [user, 'chat'], [user, 'like'], [user, 'visit'], [user, 'love'], (err, notis) => {
 			B.filterNoti(user, notis, (err, clean) => {
 				if (err)

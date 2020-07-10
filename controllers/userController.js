@@ -89,6 +89,7 @@ exports.filter = (req, res) => {
 	})
 	payload.then((results) => {
 		var sort = {sort: filter.sort, by: filter.by}
+//addition and fixed conflict
 		var funnel = new Promise((resolve, reject) => {
 			B.filterResults(results, sort, (err, pure) => {
 				 if (err)
@@ -96,6 +97,31 @@ exports.filter = (req, res) => {
 				 else
 					resolve(pure)
 			})
+//
+		var order = filter.order
+		var funnel = new Promise((resolve, reject) => {
+			if (sort.by.length === 0) {
+				B.order(results, sort.sort, order, (err, order) => {
+					if (err)
+						reject(err)
+					else
+						resolve(order)
+				})
+			} else {
+				B.filterResults(results, sort, (err, pure) => {
+					 if (err)
+					 	reject(err)
+					else {
+						B.order(pure, sort.sort, order, (err, order) => {
+							if (err)
+								reject(err)
+							else
+								resolve(order)
+						})
+					}
+				})
+			}
+//
 		})
 		funnel.then((pure) => {
 			pars.suggestions = pure
@@ -207,7 +233,7 @@ exports.loginUser = (req, res, next) => {
 			})
 		})
 		vetted.then ((status) => {
-			let admin = (status === 1) ? "[admin]" : "[non-admin]"
+00			let admin = (status === 1) ? "[admin]" : "[non-admin]"
 			console.log("login successful ", admin)
 			next()
 		}).catch(err => { throw(err)})

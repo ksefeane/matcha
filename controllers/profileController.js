@@ -110,24 +110,30 @@ exports.userProfile = (req, res) => {
 exports.matchProfile = (req, res) => {
 	var match = req.params.match
 	var user = req.session.user
+	var like = null
 	Q.fetchone("profiles", ['username', params], 'username', match, (err, result) => {
 		if (err)
 			res.redirect('/')
 		else if (result.length > 0) {
 			Q.deloneMRows('notifications', ['sender', 'receiver', 'type'], [match, user, 'visit'], () => {})
 			Q.deloneMRows('notifications', ['sender', 'receiver', 'type'], [match, user, 'like'], () => {})
-			B.visit(req.session.user, match, (err, success) => {
-				if (err)
-					console.log(err)
-				else {
-					console.log(success)
-					res.render('matchProfile', {
-						token: req.session.token, 
-						match: result[0],
-						user: req.session.user,
-						adminToken: req.session.adminToken
-					})
-				}
+			Q.fetchoneMRows('likes', 'username', ['username', 'liked'], [match, user], (err, liker) => {
+				if (liker.length > 0)
+					like = "likes you"
+				B.visit(req.session.user, match, (err, success) => {
+					if (err)
+						console.log(err)
+					else {
+						console.log(success)
+						res.render('matchProfile', {
+							token: req.session.token,
+							like: like,
+							match: result[0],
+							user: req.session.user,
+							adminToken: req.session.adminToken
+						})
+					}
+				})
 			})
 		}
 	})
